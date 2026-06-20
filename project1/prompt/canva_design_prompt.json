@@ -1,0 +1,34 @@
+{
+  "brand_guidelines": {
+    "primary_color": "#0077B5",
+    "accent_colors": ["#00BFA5", "#5A6268"],
+    "neutral_gray": "#F5F5F5",
+    "font_headings": "Montserrat",
+    "font_body": "Inter"
+  },
+  "layout": {
+    "type": "carousel",
+    "canvas_size": "1080x1350",
+    "structure": ["header", "visual", "body", "cta"],
+    "visual_hierarchy": {
+      "header": { "font_size": 48, "color": "#0077B5" },
+      "subheader": { "font_size": 32, "color": "#00BFA5" },
+      "body": { "font_size": 24, "color": "#111111" }
+    }
+  },
+  "content": {
+    "headline": "Automate Non-Coding Work with AI Agents",
+    "subheadline": "Reclaiming developer time with Canva MCP.",
+    "body_points": [
+      "Automated Documentation: Generate API specs and READMEs directly from code changes.",
+      "Visual Asset Creation: Create high-quality presentation slides and carousels using Canva MCP.",
+      "Continuous Integration: Auto-generate and update release notes with every PR."
+    ],
+    "cta": "What non-coding task should your agent automate? Let's discuss!"
+  },
+  "assets": {
+    "custom_urls": [],
+    "suggested_icons": ["robot", "documentation", "image", "pipeline"]
+  },
+  "copy_notes": "I connected the Canva MCP Server to my coding agent, created specialized LinkedIn Post Generation and Design Optimization skills, and used them to generate this content and its matching visual design."
+}

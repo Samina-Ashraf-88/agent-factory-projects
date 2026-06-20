@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__canva__generate-design",
+      "mcp__canva__export-design",
+      "mcp__canva__get-export-formats"
+    ]
+  }
+}
