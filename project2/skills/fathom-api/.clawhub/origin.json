@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "registry": "https://clawhub.ai",
+  "slug": "fathom-api",
+  "installedVersion": "1.0.6",
+  "installedAt": 1785351146924,
+  "artifact": {
+    "kind": "archive",
+    "sha256": "13e2dbd2ae7e4fa4c44bf10526b2b3fb370026cf702dbe2c7ddd4fe4b21e1581",
+    "integrity": "sha256-E+Lb0q5+T6TES/EFJrKz+zcAJs9wLb4sfd1P5LIeFYE="
+  },
+  "skillFile": {
+    "path": "SKILL.md",
+    "sha256": "0e2f342072467f5d2276aac67a594e91ed078264932eee2857116d81b97de821"
+  }
+}
