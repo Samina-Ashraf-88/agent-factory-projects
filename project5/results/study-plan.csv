@@ -1,0 +1,10 @@
+day,date,topic,hours,resource,url,cost,link_checked
+1,2026-10-26,"How MCP works: hosts, clients, servers, data and transport layers",2,MCP Architecture overview (official docs),https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture.md,free,2026-10-25
+1,2026-10-26,"How MCP works: hosts, clients, servers, data and transport layers",,Hugging Face MCP Course intro,https://huggingface.co/learn/mcp-course/en/unit0/introduction,free (free HF account),2026-10-25
+2,2026-10-27,"Server building blocks: tools, resources, prompts",1.5,Understanding MCP servers (official docs),https://modelcontextprotocol.io/docs/2026-07-28/learn/server-concepts.md,free,2026-10-25
+3,2026-10-28,Connect the Filesystem server to Claude Desktop,2,Connect to local MCP servers (official docs),https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers.md,free (plan support unverified),2026-10-25
+4,2026-10-29,Build first server in Python (weather server),2,Build an MCP server (official quickstart),https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server.md,free (NWS API; US only; no key),2026-10-25
+5,2026-10-30,Rest day,0,,,,
+6,2026-10-31,Test and debug with MCP Inspector,2,MCP Inspector docs,https://modelcontextprotocol.io/docs/tools/inspector.md,free (needs Node 22.19+),2026-10-25
+6,2026-10-31,Second practice server (calculator),,Microsoft MCP for Beginners: first server,https://github.com/microsoft/mcp-for-beginners/blob/main/03-GettingStarted/01-first-server/README.md,free,2026-10-25
+7,2026-11-01,"Build own small server, connect to Claude Desktop, review",2,Anthropic Academy: Introduction to MCP,https://anthropic.skilljar.com/introduction-to-model-context-protocol,free (free Skilljar account; page showed errors),2026-10-25
