@@ -1,0 +1,1461 @@
+<!doctype html>
+<html lang="en" data-theme="twilight">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070d2b">
+<meta name="description" content="Critter Bonk — a cozy twilight-garden whack-a-critter game. Bonk the animals before they duck back into their holes!">
+<title>Critter Bonk</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B9%3C/text%3E%3C/svg%3E">
+<style>
+/* =========================================================================
+   THEMES — every colour lives in a CSS variable so themes are swappable.
+   ========================================================================= */
+:root {
+  --sky-1: #040a22; --sky-2: #0b1846; --sky-3: #1b2c6e;
+  --hill-1: #0b2a22; --hill-2: #0f3a2c;
+  --grass-1: #0f4a33; --grass-2: #0a3324; --grass-dot: rgba(160, 255, 200, .06);
+  --accent: #ffd36b; --accent-2: #ff9ecf; --accent-3: #9be7c4;
+  --text: #f6f3ff; --text-dim: #b9c0e8;
+  --panel: rgba(9, 15, 44, .78); --panel-solid: #0d1640; --panel-line: rgba(255, 211, 107, .28);
+  --dirt-1: #d9a267; --dirt-2: #9b6434; --dirt-3: #5c3518;
+  --pit-1: #1d120a; --pit-2: #050302;
+  --btn: linear-gradient(180deg, #ffe08a, #ffb23f); --btn-text: #3a2400;
+  --good: #5be38f; --warn: #ffd23f; --bad: #ff4f6d;
+  --star: #fff7d6; --glow: rgba(255, 211, 107, .55);
+  --font: ui-rounded, "SF Pro Rounded", "Nunito", "Varela Round", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  --board: min(560px, calc(100vw - 24px), calc(100vh - 210px));
+  --hole: calc(var(--board) * .283);
+  color-scheme: dark;
+}
+@supports (height: 100svh) {
+  :root { --board: min(560px, calc(100vw - 24px), calc(100svh - 210px)); }
+}
+html[data-theme="monster"] {
+  --sky-1: #0c0216; --sky-2: #250a3d; --sky-3: #44145f;
+  --hill-1: #1a0a2a; --hill-2: #2a1140;
+  --grass-1: #2d1446; --grass-2: #1b0b2c; --grass-dot: rgba(157, 255, 87, .07);
+  --accent: #9dff57; --accent-2: #ff7ae0; --accent-3: #ffb347;
+  --text: #f3ffe9; --text-dim: #cbb5e6;
+  --panel: rgba(22, 6, 36, .8); --panel-solid: #1d0830; --panel-line: rgba(157, 255, 87, .3);
+  --dirt-1: #8d73b0; --dirt-2: #5b4380; --dirt-3: #2e1f47;
+  --pit-1: #10301a; --pit-2: #030805;
+  --btn: linear-gradient(180deg, #c6ff8f, #64e33a); --btn-text: #0f2a05;
+  --star: #e5ffd0; --glow: rgba(157, 255, 87, .5);
+}
+html[data-theme="farm"] {
+  --sky-1: #3fb4f5; --sky-2: #7fd0ff; --sky-3: #cdeeff;
+  --hill-1: #58b84a; --hill-2: #79cc5c;
+  --grass-1: #4fae47; --grass-2: #3d9539; --grass-dot: rgba(255, 255, 255, .08);
+  --accent: #ffcf33; --accent-2: #ff6f91; --accent-3: #ffffff;
+  --text: #ffffff; --text-dim: #d8f1d0;
+  --panel: rgba(28, 72, 34, .84); --panel-solid: #1e4d25; --panel-line: rgba(255, 255, 255, .35);
+  --dirt-1: #e2a96b; --dirt-2: #a86c38; --dirt-3: #6b4020;
+  --pit-1: #2a170b; --pit-2: #0b0603;
+  --btn: linear-gradient(180deg, #ffe27a, #ffb100); --btn-text: #3a2400;
+  --star: transparent; --glow: rgba(255, 230, 120, .6);
+  color-scheme: light;
+}
+
+/* =========================================================================
+   BASE
+   ========================================================================= */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--sky-1);
+  color: var(--text);
+  font-family: var(--font);
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* ---- Scenery ---------------------------------------------------------- */
+#scene { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  background: radial-gradient(120% 70% at 50% 0%, var(--sky-3) 0%, var(--sky-2) 45%, var(--sky-1) 100%); }
+#sky span { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: var(--star);
+  box-shadow: 0 0 6px var(--star); animation: twinkle var(--d, 3s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
+@keyframes twinkle { 0%, 100% { opacity: .25; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.15); } }
+.moon { position: absolute; top: 5vh; right: 9vw; width: 64px; height: 64px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffbe8, #ffe9a6 60%, #f5cf6a);
+  box-shadow: 0 0 40px 10px rgba(255, 220, 130, .35); }
+.moon::after { content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 70% 30%, transparent 40%, rgba(0,0,0,.07) 41%, transparent 55%),
+              radial-gradient(circle at 40% 70%, rgba(0,0,0,.06) 0 10%, transparent 11%); }
+html[data-theme="monster"] .moon { background: radial-gradient(circle at 35% 35%, #f6ffe0, #c9ff8a 60%, #8bdc4a); box-shadow: 0 0 50px 14px rgba(157,255,87,.3); }
+html[data-theme="farm"] .moon { top: 4vh; width: 80px; height: 80px; background: radial-gradient(circle, #fffbd0, #ffe14d 60%, #ffc400); box-shadow: 0 0 60px 20px rgba(255, 220, 60, .55); }
+.hills { position: absolute; left: -10%; right: -10%; bottom: 0; height: 42vh;
+  background: radial-gradient(60% 90% at 25% 100%, var(--hill-2) 60%, transparent 61%),
+              radial-gradient(60% 80% at 80% 100%, var(--hill-1) 60%, transparent 61%),
+              linear-gradient(transparent 55%, var(--hill-1) 56%); }
+#fireflies span { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 10px 3px var(--glow); opacity: 0; animation: drift var(--d, 9s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
+@keyframes drift {
+  0% { opacity: 0; transform: translate(0, 0); }
+  20% { opacity: .9; }
+  50% { transform: translate(var(--dx, 30px), var(--dy, -40px)); opacity: .5; }
+  80% { opacity: .9; }
+  100% { opacity: 0; transform: translate(calc(var(--dx, 30px) * -.5), calc(var(--dy, -40px) * 1.6)); }
+}
+#clouds { display: none; }
+html[data-theme="farm"] #clouds { display: block; }
+html[data-theme="farm"] #fireflies { display: none; }
+.cloud { position: absolute; width: 160px; height: 46px; border-radius: 40px; background: rgba(255,255,255,.9);
+  animation: cloud 60s linear infinite; }
+.cloud::before, .cloud::after { content: ""; position: absolute; background: inherit; border-radius: 50%; }
+.cloud::before { width: 70px; height: 70px; left: 24px; top: -34px; }
+.cloud::after { width: 54px; height: 54px; left: 80px; top: -24px; }
+@keyframes cloud { from { transform: translateX(-30vw); } to { transform: translateX(130vw); } }
+
+/* ---- Layout ----------------------------------------------------------- */
+#app { position: fixed; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: max(10px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
+.game-title { display: none; margin: 0; font-size: clamp(26px, 4.4vh, 40px); font-weight: 900; letter-spacing: .5px;
+  color: var(--accent); text-shadow: 0 2px 0 rgba(0,0,0,.35), 0 0 18px var(--glow); }
+.game-title .leaf { font-size: .8em; }
+@media (min-height: 780px) {
+  .game-title { display: block; }
+  :root { --board: min(560px, calc(100vw - 24px), calc(100vh - 270px)); }
+  @supports (height: 100svh) { :root { --board: min(560px, calc(100vw - 24px), calc(100svh - 270px)); } }
+}
+
+/* ---- HUD -------------------------------------------------------------- */
+#hud { width: var(--board); min-width: 300px; max-width: calc(100vw - 20px); flex: none; background: var(--panel); border: 1.5px solid var(--panel-line);
+  border-radius: 18px; padding: 8px 10px 9px; box-shadow: 0 10px 24px rgba(0,0,0,.3); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.hud-row { display: flex; align-items: center; gap: 6px; }
+.stat { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-dim); font-weight: 700; }
+.stat-value { font-size: clamp(22px, 3.6vh, 30px); font-weight: 900; margin-top: 3px; font-variant-numeric: tabular-nums; }
+#hud-score { color: var(--accent); }
+#hud-score.bump { animation: bump .22s ease-out; }
+@keyframes bump { 40% { transform: scale(1.35); } }
+.stat-best.is-new #hud-best { color: var(--accent-2); text-shadow: 0 0 10px var(--accent-2); }
+.stat-time.warn #hud-time { color: var(--warn); }
+.stat-time.danger #hud-time { color: var(--bad); animation: pulse .5s ease-in-out infinite alternate; }
+@keyframes pulse { to { transform: scale(1.18); } }
+.hud-buttons { display: flex; gap: 6px; flex: none; }
+.icon-btn { width: 44px; height: 44px; border-radius: 14px; border: 1.5px solid var(--panel-line); background: rgba(255,255,255,.08);
+  font-size: 20px; display: grid; place-items: center; transition: transform .1s, background .15s; }
+.icon-btn:hover { background: rgba(255,255,255,.16); }
+.icon-btn:active { transform: scale(.92); }
+.progress { margin: 8px 2px 6px; height: 10px; border-radius: 99px; background: rgba(0,0,0,.4); overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.5); }
+#progress-fill { height: 100%; width: 100%; border-radius: inherit; transform-origin: left center; background: var(--good);
+  box-shadow: 0 0 10px var(--good); transition: background-color .3s, box-shadow .3s; }
+.progress[data-level="warn"] #progress-fill { background: var(--warn); box-shadow: 0 0 10px var(--warn); }
+.progress[data-level="danger"] #progress-fill { background: var(--bad); box-shadow: 0 0 12px var(--bad); animation: barflash .5s ease-in-out infinite alternate; }
+@keyframes barflash { to { filter: brightness(1.5); } }
+.hud-row-2 { justify-content: space-between; min-height: 24px; font-size: 13px; }
+.speed-badge { font-weight: 900; padding: 3px 10px; border-radius: 99px; letter-spacing: .5px; text-transform: uppercase; font-size: 12.5px;
+  background: rgba(91, 227, 143, .18); color: #a5ffc7; border: 1.5px solid rgba(91, 227, 143, .55); white-space: nowrap; }
+.speed-badge[data-tier="fast"] { background: rgba(255, 186, 60, .2); color: #ffd58a; border-color: rgba(255, 186, 60, .7); }
+.speed-badge[data-tier="frenzy"] { background: rgba(255, 79, 109, .25); color: #ffb3c1; border-color: rgba(255, 79, 109, .8);
+  animation: frenzyGlow .6s ease-in-out infinite alternate; }
+@keyframes frenzyGlow { to { box-shadow: 0 0 12px rgba(255, 79, 109, .8); } }
+.next-hint { color: var(--text-dim); font-weight: 700; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.streak { font-weight: 900; color: var(--accent); white-space: nowrap; min-width: 58px; text-align: right; }
+.streak.off { visibility: hidden; }
+
+/* ---- Board ------------------------------------------------------------ */
+/* will-change keeps the board on its own compositor layer so the hit shake never re-rasterises it */
+#board-wrap { position: relative; width: var(--board); height: var(--board); flex: none; will-change: transform; }
+#board { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+  gap: 2.5%; padding: 5%; border-radius: 9%; touch-action: none;
+  background:
+    radial-gradient(circle at 30% 30%, var(--grass-dot) 0 2px, transparent 3px) 0 0 / 22px 22px,
+    radial-gradient(circle at 70% 60%, var(--grass-dot) 0 1.5px, transparent 2.5px) 0 0 / 17px 17px,
+    radial-gradient(120% 90% at 50% 15%, var(--grass-1), var(--grass-2));
+  box-shadow: 0 22px 40px rgba(0,0,0,.45), inset 0 0 0 3px var(--panel-line), inset 0 -18px 40px rgba(0,0,0,.35), 0 0 30px var(--glow);
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg transform='rotate(-38 22 22)'%3E%3Crect x='19' y='15' width='6' height='26' rx='3' fill='%23c58a4c' stroke='%233a220f' stroke-width='2'/%3E%3Crect x='7' y='4' width='30' height='14' rx='5' fill='%23ff6f91' stroke='%233a220f' stroke-width='2'/%3E%3Crect x='10' y='7' width='10' height='3' rx='1.5' fill='%23fff' opacity='.7'/%3E%3C/g%3E%3C/svg%3E") 10 12, pointer; }
+#board::after { /* soft vignette on the garden plot */
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 0 transparent; transition: box-shadow .3s; }
+#app.danger #board::after { box-shadow: inset 0 0 40px 6px rgba(255, 79, 109, .55); animation: dangerPulse 1s ease-in-out infinite; }
+@keyframes dangerPulse { 50% { box-shadow: inset 0 0 22px 2px rgba(255, 79, 109, .3); } }
+.decor { position: absolute; font-size: calc(var(--board) * .06); pointer-events: none; filter: drop-shadow(0 2px 2px rgba(0,0,0,.4)); z-index: 2; }
+
+/* A single hole. Layer order (back → front) is the DOM order:
+   shadow → dirt rim → dark opening → critter (clipped to the opening) → front lip → glow → key hint */
+.hole { position: relative; border: 0; padding: 0; margin: 0; background: none; border-radius: 22%; cursor: inherit; touch-action: none; }
+.hole > * { position: absolute; pointer-events: none; }
+.hole-shadow { left: -2%; right: -2%; bottom: 1%; height: 50%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0,0,0,.6), rgba(0,0,0,.25) 70%, transparent); }
+.hole-rim { left: 4%; width: 92%; bottom: 9%; height: 40%; border-radius: 50%;
+  background: radial-gradient(110% 120% at 50% 15%, var(--dirt-1) 0%, var(--dirt-2) 55%, var(--dirt-3) 100%);
+  box-shadow: inset 0 calc(var(--hole) * .012) 0 rgba(255,255,255,.28), 0 calc(var(--hole) * .03) calc(var(--hole) * .04) rgba(0,0,0,.45);
+  transition: filter .15s; }
+.hole-pit { left: 10%; width: 80%; bottom: 14%; height: 30%; border-radius: 50%;
+  background: radial-gradient(95% 120% at 50% 90%, var(--pit-1), var(--pit-2) 75%);
+  box-shadow: inset 0 calc(var(--hole) * .05) calc(var(--hole) * .05) rgba(0,0,0,.9), 0 0 0 calc(var(--hole) * .01) rgba(0,0,0,.35); }
+html[data-theme="monster"] .hole-pit { background: radial-gradient(95% 120% at 50% 90%, #1f5a2a, var(--pit-2) 75%); }
+/* The mask's bottom edge follows the lower half of the pit ellipse (half-height 15% of a mask that is 86% tall → 17.44%),
+   so the critter is cut off exactly by the front edge of the hole and appears to climb out of it. */
+.critter-mask { left: 10%; width: 80%; top: 0; bottom: 14%; overflow: hidden; border-radius: 0 0 50% 50% / 0 0 17.44% 17.44%; }
+.critter { position: absolute; left: 0; right: 0; bottom: 0; height: 74%; display: flex; align-items: flex-end; justify-content: center;
+  transform: translate3d(0, 120%, 0); transform-origin: 50% 100%; will-change: transform; }
+.critter .face { display: block; font-size: calc(var(--hole) * .58); line-height: 1; filter: drop-shadow(0 calc(var(--hole) * .02) calc(var(--hole) * .02) rgba(0,0,0,.45)); }
+.critter.is-hit .face { animation: hitFlash .28s ease-out; }
+@keyframes hitFlash { 0% { filter: brightness(2.4) saturate(.4); } 100% { filter: brightness(1) drop-shadow(0 2px 2px rgba(0,0,0,.45)); } }
+.critter .dizzy { position: absolute; top: 2%; left: 50%; font-size: calc(var(--hole) * .2); opacity: 0; transform: translateX(-50%); }
+.critter.is-hit .dizzy { opacity: 1; animation: spin .45s linear infinite; }
+@keyframes spin { from { transform: translateX(-50%) rotate(0); } to { transform: translateX(-50%) rotate(360deg); } }
+.hole-lip { left: 4%; width: 92%; bottom: 9%; height: 40%; border-radius: 50%;
+  /* ring with the pit cut out (pit half-size: 40/92 = 43.48% wide, 15/40 = 37.5% tall), lower half only → sits in front of the critter */
+  background: radial-gradient(43.48% 37.5% at 50% 50%, transparent 97%, rgba(255,255,255,.35) 100%, var(--dirt-1) 108%, var(--dirt-2) 135%, var(--dirt-3) 165%);
+  clip-path: inset(50% 0 0 0); }
+.hole-glow { left: -6%; right: -6%; bottom: 0; height: 70%; border-radius: 50%; opacity: 0;
+  background: radial-gradient(closest-side, var(--glow), transparent); }
+.hole-glow.flash { animation: glow .4s ease-out; }
+.hole-glow.whiff { background: radial-gradient(closest-side, rgba(255,255,255,.18), transparent); animation: glow .25s ease-out; }
+@keyframes glow { 0% { opacity: 1; transform: scale(.85); } 100% { opacity: 0; transform: scale(1.2); } }
+.key-hint { top: 3%; left: 4%; min-width: calc(var(--hole) * .17); padding: 0 calc(var(--hole) * .03); height: calc(var(--hole) * .17); border-radius: 99px;
+  font-size: calc(var(--hole) * .11); font-weight: 900; line-height: calc(var(--hole) * .17); text-align: center;
+  background: rgba(0,0,0,.35); color: rgba(255,255,255,.55); }
+@media (hover: none) { .key-hint { display: none; } }
+@media (hover: hover) { .hole:hover .hole-rim { filter: brightness(1.12); } }
+.hole:focus-visible { outline-offset: -2px; }
+
+/* ---- Effects ---------------------------------------------------------- */
+#fx { position: absolute; inset: 0; pointer-events: none; z-index: 5; overflow: visible; }
+.particle { position: absolute; left: 0; top: 0; width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%; background: var(--c); box-shadow: 0 0 8px 1px var(--c), inset 0 0 0 1.5px rgba(255,255,255,.55);
+  animation: burst var(--t, .6s) ease-out forwards; }
+.particle.star { background: none; box-shadow: none; color: var(--c); font-size: var(--s); line-height: 1; width: auto; height: auto; margin: -.5em 0 0 -.5em;
+  text-shadow: 0 0 8px var(--c); }
+@keyframes burst {   /* fast pop outwards, hold bright, then fall with a little gravity and fade */
+  0% { transform: translate(0, 0) scale(.5); opacity: 1; }
+  30% { transform: translate(calc(var(--dx) * .8), calc(var(--dy) * .8)) scale(1.15); opacity: 1; }
+  65% { opacity: .95; }
+  100% { transform: translate(var(--dx), calc(var(--dy) + var(--fall, 26px))) scale(.3) rotate(var(--r, 0deg)); opacity: 0; }
+}
+.pop { position: absolute; transform: translate(-50%, -50%); font-weight: 900; font-size: calc(var(--board) * .09); color: #fff;
+  -webkit-text-stroke: calc(var(--board) * .008) #4a2a00; paint-order: stroke fill;
+  text-shadow: 0 3px 0 rgba(0,0,0,.45), 0 0 16px var(--accent), 0 0 4px var(--accent); white-space: nowrap;
+  animation: popUp .75s ease-out forwards; }
+.pop.small { font-size: calc(var(--board) * .05); color: #ffe1e1; -webkit-text-stroke-color: #3a0010; text-shadow: 0 2px 0 rgba(0,0,0,.45); animation-duration: .6s; }
+.ring { position: absolute; width: calc(var(--hole) * .9); height: calc(var(--hole) * .9); margin: calc(var(--hole) * -.45) 0 0 calc(var(--hole) * -.45);
+  border-radius: 50%; border: calc(var(--hole) * .035) solid var(--accent); box-shadow: 0 0 12px var(--glow), inset 0 0 12px var(--glow);
+  animation: ring .38s ease-out forwards; }
+@keyframes ring { 0% { transform: scale(.25); opacity: 1; } 100% { transform: scale(1.35); opacity: 0; } }
+.ring.ring-bad { border-color: var(--bad); box-shadow: 0 0 14px var(--bad), inset 0 0 12px var(--bad); }
+/* Decoys get a pulsing red warning rim so they can be told apart at a glance, even at Frenzy speed. */
+.hole.is-decoy .hole-rim { box-shadow: 0 0 0 calc(var(--hole) * .025) var(--bad), 0 0 calc(var(--hole) * .12) var(--bad); animation: warnRim .45s ease-in-out infinite alternate; }
+@keyframes warnRim { to { box-shadow: 0 0 0 calc(var(--hole) * .02) var(--bad), 0 0 calc(var(--hole) * .05) rgba(255, 79, 109, .4); } }
+.decoy-tip { margin: 10px 0 0; font-size: 14px; font-weight: 800; color: #ffb3c1; }
+.decoy-tip span { font-size: 18px; vertical-align: -2px; }
+/* mallet swing at the tap point: wind-up → strike → fade */
+.mallet { position: absolute; font-size: calc(var(--hole) * .5); line-height: 1; margin: calc(var(--hole) * -.42) 0 0 calc(var(--hole) * -.05);
+  transform-origin: 85% 85%; filter: drop-shadow(0 3px 2px rgba(0,0,0,.5)); animation: swing .26s ease-out forwards; }
+@keyframes swing {
+  0% { transform: rotate(35deg); opacity: 1; }
+  35% { transform: rotate(-38deg); opacity: 1; }
+  55% { transform: rotate(-30deg); opacity: 1; }
+  100% { transform: rotate(-30deg); opacity: 0; }
+}
+@keyframes popUp {
+  0% { transform: translate(-50%, -30%) scale(.5); opacity: 0; }
+  18% { transform: translate(-50%, -70%) scale(1.25); opacity: 1; }
+  100% { transform: translate(-50%, -190%) scale(1); opacity: 0; }
+}
+#banner { position: absolute; left: 50%; top: 50%; z-index: 6; pointer-events: none; transform: translate(-50%, -50%); opacity: 0;
+  font-weight: 900; font-size: calc(var(--board) * .1); white-space: nowrap; color: #fff; letter-spacing: 1px;
+  -webkit-text-stroke: calc(var(--board) * .01) rgba(20, 8, 0, .85); paint-order: stroke fill;
+  text-shadow: 0 5px 0 rgba(0,0,0,.45), 0 0 26px var(--glow); }
+#banner.show { animation: banner 1.1s ease-out forwards; }
+#banner[data-kind="fast"] { color: #ffcf6b; }
+#banner[data-kind="frenzy"] { color: #ff7a93; }
+#banner[data-kind="streak"] { color: var(--accent-3); font-size: calc(var(--board) * .075); }
+#banner[data-kind="over"] { color: var(--accent); animation-duration: 1.4s; }
+@keyframes banner {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.4); }
+  18% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); }
+  30% { transform: translate(-50%, -50%) scale(1); }
+  75% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -80%) scale(1); }
+}
+#app.is-paused #fx *, #app.is-paused #banner { animation-play-state: paused; }
+/* confetti lives inside the results overlay: above the dimmed backdrop, behind the panel text */
+#confetti { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+#screen-over .panel { z-index: 1; }
+#screen-over:not([hidden]) .stats div { animation: statIn .4s cubic-bezier(.2, 1.3, .4, 1) backwards; }
+#screen-over .stats div:nth-child(2) { animation-delay: .07s; }
+#screen-over .stats div:nth-child(3) { animation-delay: .14s; }
+#screen-over .stats div:nth-child(4) { animation-delay: .21s; }
+#screen-over .stats div:nth-child(5) { animation-delay: .28s; }
+#screen-over .stats div:nth-child(6) { animation-delay: .35s; }
+@keyframes statIn { from { opacity: 0; transform: translateY(10px) scale(.92); } }
+html[data-theme="farm"] .moon::after { display: none; }
+
+/* ---- Overlays / screens ------------------------------------------------ */
+/* extra bottom padding keeps menu buttons clear of corner overlays (e.g. a host badge) */
+.screen { position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 16px 16px 76px;
+  background: rgba(3, 6, 22, .55); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  overflow-y: auto; touch-action: pan-y; animation: fadeIn .25s ease-out; }
+html[data-theme="farm"] .screen { background: rgba(20, 60, 90, .35); }
+.screen[hidden] { display: none; }
+@keyframes fadeIn { from { opacity: 0; } }
+.panel { position: relative; width: min(440px, 100%); margin: auto; background: var(--panel-solid); border: 2px solid var(--panel-line);
+  border-radius: 26px; padding: 22px 20px 20px; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 40px var(--glow);
+  animation: panelIn .35s cubic-bezier(.2, 1.4, .4, 1); }
+@keyframes panelIn { from { transform: translateY(18px) scale(.94); opacity: 0; } }
+.title { margin: 0; font-size: clamp(38px, 11vw, 54px); font-weight: 900; line-height: 1; color: var(--accent); letter-spacing: .5px;
+  text-shadow: 0 3px 0 rgba(0,0,0,.4), 0 0 26px var(--glow); }
+.title small { display: block; font-size: 15px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-3); margin-bottom: 6px; text-shadow: none; }
+.subtitle { margin: 10px auto 12px; max-width: 340px; color: var(--text-dim); font-size: 15px; line-height: 1.4; }
+.preview { display: flex; justify-content: center; gap: 4px; margin: 4px 0 12px; }
+.preview span { display: grid; place-items: end center; width: 46px; height: 46px; font-size: 32px; line-height: 1; border-radius: 0 0 50% 50%;
+  background: radial-gradient(60% 30% at 50% 92%, var(--pit-2) 70%, var(--dirt-2) 72%, var(--dirt-3) 100%, transparent 101%);
+  animation: peek 2.4s ease-in-out infinite; animation-delay: calc(var(--i) * .22s); }
+@keyframes peek { 0%, 100% { transform: translateY(5px); } 50% { transform: translateY(-6px); } }
+.chip { display: inline-block; padding: 5px 12px; border-radius: 99px; background: rgba(255,255,255,.08); border: 1.5px solid var(--panel-line);
+  font-weight: 800; font-size: 13px; color: var(--accent); }
+.field { margin: 14px 0 0; border: 0; padding: 0; }
+.field legend { display: block; margin: 0 auto 6px; padding: 0; font-size: 12px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); font-weight: 800; }
+.seg { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.seg label { position: relative; flex: 1 1 0; min-width: 0; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span { display: block; padding: 10px 6px; min-height: 44px; border-radius: 14px; border: 1.5px solid var(--panel-line); background: rgba(255,255,255,.06);
+  font-weight: 800; font-size: 14px; transition: background .15s, transform .1s; white-space: nowrap; }
+.seg input:checked + span { background: var(--btn); color: var(--btn-text); border-color: transparent; box-shadow: 0 3px 0 rgba(0,0,0,.3); }
+.seg input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.seg label:active span { transform: scale(.96); }
+.seg-theme span { font-size: 12.5px; }
+.best-line { margin: 14px 0 0; font-weight: 800; color: var(--text-dim); }
+.best-line strong { color: var(--accent); font-size: 20px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 22px; border-radius: 16px;
+  border: 0; font-weight: 900; font-size: 18px; letter-spacing: .4px; transition: transform .1s, filter .15s; }
+.btn:hover { filter: brightness(1.08); }
+.btn:active { transform: translateY(2px) scale(.98); }
+.btn-primary { background: var(--btn); color: var(--btn-text); box-shadow: 0 5px 0 rgba(0,0,0,.35), 0 0 22px var(--glow); }
+.btn-ghost { background: rgba(255,255,255,.08); border: 1.5px solid var(--panel-line); color: var(--text); }
+.btn-big { width: 100%; font-size: 22px; min-height: 58px; margin-top: 16px; }
+.row { display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+.row .btn { flex: 1 1 140px; }
+.controls { margin: 14px 0 0; padding: 10px 12px; border-radius: 14px; background: rgba(0,0,0,.22); font-size: 13px; line-height: 1.6; color: var(--text-dim); text-align: left; }
+.controls b { color: var(--text); }
+kbd { display: inline-block; min-width: 20px; padding: 0 5px; border-radius: 6px; background: rgba(255,255,255,.14); border-bottom: 2px solid rgba(0,0,0,.35);
+  font: 800 12px/18px var(--font); color: var(--text); text-align: center; }
+.start-row { display: flex; gap: 10px; margin-top: 16px; }
+.start-row .btn-big { margin-top: 0; flex: 1; white-space: nowrap; padding-left: 10px; padding-right: 10px; }
+@media (max-width: 360px) { .start-row .btn-big { font-size: 19px; } }
+.sound-toggle { flex: none; width: 58px; min-height: 58px; padding: 0; font-size: 24px; }
+/* Start panel: one flowing column in portrait (wrappers vanish via display: contents and the
+   tip + controls are moved after Start with `order`); two side-by-side columns in short landscape. */
+.panel-start { display: flex; flex-direction: column; }
+.panel-start .col { display: contents; }
+.panel-start .decoy-tip, .panel-start .controls { order: 2; }
+.panel-start .chip { align-self: center; }
+@media (orientation: landscape) and (max-height: 560px) {
+  .panel-start { flex-direction: row; align-items: center; gap: 20px; width: min(760px, 100%); }
+  .panel-start .col { display: flex; flex-direction: column; flex: 1 1 0; min-width: 0; }
+  .panel-start .title { font-size: 38px; }
+  .panel-start .controls { margin-top: 8px; }
+}
+/* Short screens: tighten the start panel so Start is visible without scrolling (down to 320×568) */
+@media (max-height: 760px) {
+  .screen { padding-top: 10px; }
+  .panel { padding: 14px 16px 14px; }
+  .title { font-size: clamp(34px, 10vw, 44px); }
+  .title small { font-size: 13px; margin-bottom: 3px; }
+  .preview { margin: 2px 0 6px; }
+  .preview span { width: 38px; height: 38px; font-size: 26px; }
+  .subtitle { margin: 4px auto 8px; font-size: 14px; line-height: 1.3; }
+  .chip { padding: 3px 10px; font-size: 12px; }
+  .field { margin-top: 9px; }
+  .field legend { margin-bottom: 4px; }
+  .seg span { padding: 8px 4px; min-height: 40px; }
+  .best-line { margin-top: 8px; }
+  .start-row { margin-top: 10px; }
+  .btn-big, .sound-toggle { min-height: 52px; }
+  .decoy-tip { margin-top: 8px; font-size: 13px; }
+  .controls { margin-top: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.5; }
+}
+
+/* results */
+.result-msg { margin: 0; font-size: 22px; font-weight: 900; color: var(--accent-3); }
+.final-score { margin: 6px 0 0; font-size: clamp(72px, 22vw, 110px); line-height: 1; font-weight: 900; color: var(--accent);
+  text-shadow: 0 5px 0 rgba(0,0,0,.4), 0 0 34px var(--glow); font-variant-numeric: tabular-nums; }
+.final-score.land { animation: land .5s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes land { 0% { transform: scale(1.5); } }
+.final-label { margin: 0; color: var(--text-dim); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-size: 12px; }
+.badge-new { display: inline-block; margin-top: 10px; padding: 7px 16px; border-radius: 99px; font-weight: 900; letter-spacing: 1px;
+  background: linear-gradient(90deg, #ff6f91, #ffc04d, #7cf0b2, #6fb6ff, #ff6f91); background-size: 300% 100%; color: #2a0b14;
+  box-shadow: 0 0 20px rgba(255, 111, 145, .6); animation: rainbow 2s linear infinite, badgePop .6s cubic-bezier(.2, 1.8, .4, 1); }
+.badge-new[hidden] { display: none; }
+@keyframes rainbow { to { background-position: 300% 0; } }
+@keyframes badgePop { 0% { transform: scale(0) rotate(-12deg); } }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0 4px; }
+.stats div { padding: 9px 4px; border-radius: 14px; background: rgba(0,0,0,.25); border: 1.5px solid rgba(255,255,255,.07); }
+.stats dt { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); font-weight: 800; }
+.stats dd { margin: 3px 0 0; font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.best-compare { margin: 10px 0 0; color: var(--text-dim); font-weight: 700; font-size: 14px; }
+.pause-icon { font-size: 54px; line-height: 1; }
+
+/* ---- Short landscape (phones on their side): HUD becomes a side column ---- */
+@media (orientation: landscape) and (max-height: 560px) {
+  :root { --board: min(560px, calc(100vh - 20px), calc(100vw - 250px)); }
+  @supports (height: 100svh) { :root { --board: min(560px, calc(100svh - 20px), calc(100vw - 250px)); } }
+  /* board on the left, HUD on the right (vertically centred): keeps every hole clear of
+     bottom-right corner overlays such as a host's badge */
+  #app { flex-direction: row-reverse; gap: 14px; }
+  #hud { width: 210px; min-width: 0; }
+  #hud .hud-row:first-child { flex-wrap: wrap; justify-content: center; }
+  #hud .stat { flex: 1 1 30%; }
+  #hud .hud-buttons { width: 100%; justify-content: center; margin-top: 6px; }
+  .hud-row-2 { flex-wrap: wrap; justify-content: center; gap: 4px 8px; }
+  .next-hint { flex-basis: 100%; order: 3; }
+  .game-title { display: none; }
+}
+@media (max-width: 360px) {
+  .stat-label { font-size: 10px; letter-spacing: .6px; }
+  .icon-btn { width: 40px; height: 40px; }
+}
+
+/* ---- Reduced motion ---------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  #sky span, #fireflies span, .cloud, .preview span, .speed-badge, .badge-new, .stat-time.danger #hud-time,
+  .progress[data-level="danger"] #progress-fill, #app.danger #board::after { animation: none !important; }
+  #fireflies span { opacity: .6; }
+  .mallet, .ring, #screen-over .stats div { animation-duration: .01s !important; }
+  .hole.is-decoy .hole-rim { animation: none; }
+  .critter.is-hit .dizzy { animation: none; }
+  .panel, .screen { animation-duration: .01s; }
+}
+</style>
+</head>
+<body>
+<noscript><p style="padding:20px;text-align:center">Critter Bonk needs JavaScript to run.</p></noscript>
+
+<div id="scene" aria-hidden="true">
+  <div id="sky"></div>
+  <div class="moon"></div>
+  <div id="clouds"><div class="cloud" style="top:9vh;animation-delay:-12s"></div><div class="cloud" style="top:20vh;transform:scale(.7);animation-duration:85s;animation-delay:-50s"></div></div>
+  <div class="hills"></div>
+  <div id="fireflies"></div>
+</div>
+
+<main id="app">
+  <h1 class="game-title" aria-hidden="true"><span class="leaf" id="title-l">🌿</span> Critter Bonk <span class="leaf" id="title-r">🌙</span></h1>
+
+  <section id="hud" aria-label="Game status">
+    <div class="hud-row">
+      <div class="stat"><span class="stat-label">Score</span><span id="hud-score" class="stat-value">0</span></div>
+      <div class="stat stat-time" id="stat-time"><span class="stat-label">Time</span><span id="hud-time" class="stat-value">30</span></div>
+      <div class="stat stat-best" id="stat-best"><span class="stat-label">Best</span><span id="hud-best" class="stat-value">0</span></div>
+      <div class="hud-buttons">
+        <button id="btn-pause" class="icon-btn" type="button" aria-label="Pause game" title="Pause (Space)">⏸️</button>
+        <button id="btn-sound-hud" class="icon-btn" type="button" aria-label="Sound" aria-pressed="true" title="Sound (M)">🔊</button>
+      </div>
+    </div>
+    <div class="progress" id="progress" role="progressbar" aria-label="Time remaining" aria-valuemin="0" aria-valuemax="30" aria-valuenow="30" data-level="ok">
+      <div id="progress-fill"></div>
+    </div>
+    <div class="hud-row hud-row-2">
+      <span id="hud-speed" class="speed-badge" data-tier="easy">Easy</span>
+      <span id="hud-next" class="next-hint">Fast at 8</span>
+      <span id="hud-streak" class="streak off" aria-hidden="true">🔥 x0</span>
+    </div>
+  </section>
+
+  <div id="board-wrap">
+    <div id="board" role="group" aria-label="Garden with nine holes. Use number keys 1 to 9 or tap a critter."></div>
+    <div id="fx" aria-hidden="true"></div>
+    <div id="banner" aria-hidden="true"></div>
+  </div>
+</main>
+
+<!-- Start screen -->
+<section id="screen-start" class="screen" role="dialog" aria-modal="true" aria-labelledby="start-title">
+  <div class="panel panel-start">
+   <div class="col col-a">
+    <h2 class="title" id="start-title"><small id="theme-name">Twilight Garden</small>Critter Bonk</h2>
+    <div class="preview" id="preview" aria-hidden="true"></div>
+    <p class="subtitle">Critters are popping out of the garden! <b>Bonk</b> each one before it ducks back down. Every bonk makes them faster.</p>
+    <span class="chip">⏱️ 30-second round</span>
+    <p class="decoy-tip" id="decoy-tip"></p>
+    <div class="controls">
+      <b>How to play:</b> tap or click a critter to bonk it (+1).<br>
+      <b>Keys:</b> <kbd>1</kbd>–<kbd>9</kbd> hit holes (top-left is 1) · <kbd>Space</kbd> pause · <kbd>M</kbd> mute · <kbd>Enter</kbd> start
+    </div>
+   </div>
+   <div class="col col-b">
+    <fieldset class="field">
+      <legend>Difficulty</legend>
+      <div class="seg" id="seg-difficulty">
+        <label><input type="radio" name="difficulty" value="easy"><span>🌱 Easy</span></label>
+        <label><input type="radio" name="difficulty" value="normal"><span>🌼 Normal</span></label>
+        <label><input type="radio" name="difficulty" value="hard"><span>🔥 Hard</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="field">
+      <legend>Theme</legend>
+      <div class="seg seg-theme" id="seg-theme">
+        <label><input type="radio" name="theme" value="twilight"><span>🌙 Twilight</span></label>
+        <label><input type="radio" name="theme" value="monster"><span>👻 Monster</span></label>
+        <label><input type="radio" name="theme" value="farm"><span>🌞 Farm</span></label>
+      </div>
+    </fieldset>
+
+    <p class="best-line">🏆 Best (<span id="start-best-mode">Normal</span>): <strong id="start-best">0</strong></p>
+    <div class="start-row">
+      <button id="btn-sound-start" class="btn btn-ghost sound-toggle" type="button" aria-pressed="true" aria-label="Sound on. Press to mute" title="Sound (M)">🔊</button>
+      <button id="btn-start" class="btn btn-primary btn-big" type="button">▶ Start Game</button>
+    </div>
+   </div>
+  </div>
+</section>
+
+<!-- Pause screen -->
+<section id="screen-pause" class="screen" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+  <div class="panel">
+    <div class="pause-icon" aria-hidden="true">⏸️</div>
+    <h2 class="title" id="pause-title" style="font-size:40px">Paused</h2>
+    <p class="subtitle">The critters are waiting patiently… and so is the timer.</p>
+    <button id="btn-resume" class="btn btn-primary btn-big" type="button">▶ Resume</button>
+    <div class="row">
+      <button id="btn-restart" class="btn btn-ghost" type="button">↻ Restart</button>
+      <button id="btn-quit" class="btn btn-ghost" type="button">☰ Menu</button>
+    </div>
+  </div>
+</section>
+
+<!-- Game over screen -->
+<section id="screen-over" class="screen" role="dialog" aria-modal="true" aria-labelledby="over-msg" hidden>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div class="panel">
+    <p class="result-msg" id="over-msg">Nice bonking!</p>
+    <p class="final-score" id="over-score" aria-live="polite">0</p>
+    <p class="final-label">critters bonked</p>
+    <span class="badge-new" id="over-new" hidden>🏆 NEW HIGH SCORE!</span>
+    <dl class="stats">
+      <div><dt>Hits</dt><dd id="st-hits">0</dd></div>
+      <div><dt>Accuracy</dt><dd id="st-acc">0%</dd></div>
+      <div><dt>Hits/min</dt><dd id="st-hpm">0</dd></div>
+      <div><dt>Best streak</dt><dd id="st-streak">0</dd></div>
+      <div><dt>Escaped</dt><dd id="st-escaped">0</dd></div>
+      <div><dt>Top speed</dt><dd id="st-tier">Easy</dd></div>
+    </dl>
+    <p class="best-compare" id="over-best">Best: 0</p>
+    <button id="btn-again" class="btn btn-primary btn-big" type="button">↻ Play Again</button>
+    <div class="row"><button id="btn-menu" class="btn btn-ghost" type="button">☰ Return to Menu</button></div>
+  </div>
+</section>
+
+<div id="sr-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* =======================================================================
+     CONFIGURATION
+     ======================================================================= */
+  const ROUND_MS = 30000;           // 30-second game mode
+  const WARN_MS = 10000;            // progress bar turns yellow at 10s left
+  const DANGER_MS = 5000;           // red + ticking during the final 5 seconds
+  const RISE_MS = 150;              // time for a critter to climb out
+  const RETREAT_MS = 200;           // time for an un-bonked critter to duck back down
+  const HIT_MS = 460;               // bonk reaction + sink
+  const MIN_VISIBLE_MS = 600;       // never show a critter for less than this (fairness floor)
+  const Y_UP = 10, Y_HIDDEN = 122;  // critter translateY (%) when fully up / fully hidden
+
+  /* Difficulty progression is driven ONLY by successful hits (the score), never by elapsed time.
+     Speed tiers and their score thresholds (score >= threshold enters the tier):
+
+       Difficulty | Easy tier | Fast at | Frenzy at | speed multiplier (visibility & gaps)
+       -----------+-----------+---------+-----------+------------------------------------
+       Easy       |  0 – 9    |   10    |    22     | 1.00  (first critter visible ~2.5 s)
+       Normal     |  0 – 7    |    8    |    18     | 0.86
+       Hard       |  0 – 5    |    6    |    14     | 0.74
+  */
+  const DIFFICULTIES = {
+    easy:   { label: 'Easy',   fast: 10, frenzy: 22, speed: 1.00 },
+    normal: { label: 'Normal', fast: 8,  frenzy: 18, speed: 0.86 },
+    hard:   { label: 'Hard',   fast: 6,  frenzy: 14, speed: 0.74 },
+  };
+  /* Per-tier tuning. [start, end] ranges interpolate as the score climbs through the tier,
+     so the game tightens a little with every hit, with a clear step (and banner) at each tier. */
+  /* `decoy` = chance that a spawn is a spiky decoy that must NOT be bonked (never in the Easy tier). */
+  const TIERS = {
+    easy:   { label: 'Easy',   visible: [2500, 1900], gap: [950, 760], afterHit: 280, maxActive: 1, multi: [0, 0],        decoy: [0, 0] },
+    fast:   { label: 'Fast',   visible: [1650, 1250], gap: [700, 520], afterHit: 170, maxActive: 2, multi: [0.2, 0.4],    decoy: [0.1, 0.14] },
+    frenzy: { label: 'Frenzy', visible: [1150, 850],  gap: [460, 320], afterHit: 110, maxActive: 3, multi: [0.35, 0.55],  decoy: [0.15, 0.2] },
+  };
+  const FRENZY_RAMP = 16;           // Frenzy keeps tightening for this many hits, then plateaus
+  const TIER_ORDER = ['easy', 'fast', 'frenzy'];
+
+  const THEMES = {
+    twilight: { name: 'Twilight Garden', color: '#070d2b',
+      critters: [['🐹', 'Hamster'], ['🐻', 'Bear'], ['🐸', 'Frog'], ['🐵', 'Monkey'], ['🐰', 'Rabbit'], ['🦊', 'Fox']],
+      decoy: ['🦔', 'hedgehog', "it's spiky"],
+      particles: ['#ffd36b', '#ff9ecf', '#9be7c4', '#ffffff', '#b9a7ff'], decor: ['🌸', '🍄', '🌿', '🌼'], title: ['🌿', '🌙'] },
+    monster: { name: 'Monster Mash', color: '#12041f',
+      critters: [['👻', 'Ghost'], ['👾', 'Alien'], ['🧟', 'Zombie'], ['🎃', 'Pumpkin'], ['🦇', 'Bat'], ['👹', 'Ogre']],
+      decoy: ['💣', 'bomb', "it's explosive"],
+      particles: ['#9dff57', '#ff7ae0', '#ffb347', '#e5ffd0', '#b07cff'], decor: ['🕸️', '🍄', '🦴', '🕯️'], title: ['🕸️', '🎃'] },
+    farm: { name: 'Sunny Farm', color: '#3fb4f5',
+      critters: [['🐮', 'Cow'], ['🐷', 'Pig'], ['🐔', 'Chicken'], ['🐑', 'Sheep'], ['🐴', 'Horse'], ['🐶', 'Dog']],
+      decoy: ['🐝', 'bee', 'it stings'],
+      particles: ['#ffcf33', '#ff6f91', '#ffffff', '#7fd0ff', '#8ee067'], decor: ['🌻', '🌾', '🌷', '🥕'], title: ['🌻', '☀️'] },
+  };
+
+  const reduceMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+
+  /* =======================================================================
+     STORAGE (best scores + preferences). Falls back to memory if blocked.
+     ======================================================================= */
+  const STORE_KEY = 'critterBonk:v1';
+  const store = (() => {
+    const defaults = () => ({ best: { easy: 0, normal: 0, hard: 0 }, sound: true, difficulty: 'normal', theme: 'twilight' });
+    let data = defaults();
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if (raw && typeof raw === 'object') {
+        if (raw.best && typeof raw.best === 'object') {
+          for (const k of Object.keys(DIFFICULTIES)) {
+            const v = Number(raw.best[k]);
+            if (Number.isFinite(v) && v >= 0) data.best[k] = Math.floor(v);
+          }
+        }
+        if (typeof raw.sound === 'boolean') data.sound = raw.sound;
+        if (DIFFICULTIES[raw.difficulty]) data.difficulty = raw.difficulty;
+        if (THEMES[raw.theme]) data.theme = raw.theme;
+      }
+    } catch (e) { /* corrupt or unavailable storage: keep defaults */ }
+    return {
+      get: () => data,
+      save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch (e) { /* private mode etc. */ } },
+    };
+  })();
+
+  /* =======================================================================
+     SOUND — tiny Web Audio synth. Nothing is created until the player interacts.
+     ======================================================================= */
+  const Sound = (() => {
+    let ctx = null, master = null, noiseBuf = null, unlocked = false;
+    let enabled = store.get().sound;
+
+    function ac() {
+      if (!enabled || !unlocked) return null;
+      try {
+        if (!ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return null;
+          ctx = new AC();
+          master = ctx.createGain();
+          master.gain.value = 0.55;
+          master.connect(ctx.destination);
+        }
+        if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+        return ctx;
+      } catch (e) { ctx = null; return null; }
+    }
+    function tone(freq, { to = freq, dur = 0.12, type = 'sine', vol = 0.25, delay = 0, attack = 0.005 } = {}) {
+      const c = ac(); if (!c) return;
+      try {
+        const t = c.currentTime + delay;
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t);
+        if (to !== freq) o.frequency.exponentialRampToValueAtTime(Math.max(20, to), t + dur);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(vol, t + attack);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g).connect(master);
+        o.start(t); o.stop(t + dur + 0.02);
+      } catch (e) { /* ignore audio failures */ }
+    }
+    function noise({ dur = 0.06, vol = 0.2, delay = 0, freq = 1800, q = 1, type = 'bandpass' } = {}) {
+      const c = ac(); if (!c) return;
+      try {
+        if (!noiseBuf) {
+          noiseBuf = c.createBuffer(1, Math.floor(c.sampleRate * 0.3), c.sampleRate);
+          const d = noiseBuf.getChannelData(0);
+          for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+        }
+        const t = c.currentTime + delay;
+        const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+        s.buffer = noiseBuf; f.type = type; f.frequency.value = freq; f.Q.value = q;
+        g.gain.setValueAtTime(vol, t);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        s.connect(f).connect(g).connect(master);
+        s.start(t); s.stop(t + dur + 0.02);
+      } catch (e) { /* ignore */ }
+    }
+    const notes = (list, opts) => list.forEach((f, i) => tone(f, { ...opts, delay: (opts.step || 0.08) * i }));
+
+    return {
+      unlock() { unlocked = true; ac(); },
+      get enabled() { return enabled; },
+      setEnabled(v) { enabled = !!v; if (enabled) ac(); else if (ctx && ctx.state === 'running') ctx.suspend().catch(() => {}); },
+      hit(streak) {
+        const lift = 1 + Math.min(streak, 12) * 0.035;
+        tone(560 * lift, { to: 150 * lift, dur: 0.13, type: 'triangle', vol: 0.42 });
+        noise({ dur: 0.05, vol: 0.28, freq: 2200, q: 0.8 });
+        tone(1320 * lift, { dur: 0.09, type: 'sine', vol: 0.09, delay: 0.035 });
+      },
+      miss() { tone(170, { to: 80, dur: 0.1, type: 'sine', vol: 0.16 }); noise({ dur: 0.07, vol: 0.08, freq: 500, type: 'lowpass' }); },
+      ouch() { tone(240, { to: 90, dur: 0.24, type: 'sawtooth', vol: 0.12 }); tone(180, { to: 70, dur: 0.24, type: 'square', vol: 0.06, delay: 0.02 }); noise({ dur: 0.12, vol: 0.14, freq: 900 }); },
+      start() { notes([523, 659, 784, 1047], { type: 'triangle', vol: 0.22, dur: 0.14, step: 0.075 }); },
+      tier(kind) { const base = kind === 'frenzy' ? 660 : 520; tone(base, { to: base * 2, dur: 0.28, type: 'sawtooth', vol: 0.07 }); notes([base * 1.5, base * 2], { type: 'triangle', vol: 0.2, dur: 0.16, step: 0.09 }); },
+      streak() { notes([988, 1319], { type: 'sine', vol: 0.16, dur: 0.12, step: 0.06 }); },
+      warn() { notes([880, 880], { type: 'square', vol: 0.07, dur: 0.1, step: 0.16 }); },
+      tick(n) { tone(n === 1 ? 1400 : 1050, { dur: 0.07, type: 'square', vol: 0.07 }); },
+      over() { notes([784, 659, 523], { type: 'triangle', vol: 0.22, dur: 0.22, step: 0.13 }); tone(392, { dur: 0.45, type: 'triangle', vol: 0.18, delay: 0.42 }); },
+      fanfare() { notes([523, 659, 784, 1047, 1319], { type: 'triangle', vol: 0.2, dur: 0.22, step: 0.1 }); tone(1568, { dur: 0.6, type: 'sine', vol: 0.12, delay: 0.5 }); },
+      click() { tone(720, { to: 900, dur: 0.05, type: 'sine', vol: 0.1 }); },
+    };
+  })();
+
+  /* =======================================================================
+     DOM
+     ======================================================================= */
+  const $ = (s) => document.querySelector(s);
+  const app = $('#app'), boardEl = $('#board'), boardWrap = $('#board-wrap'), fxEl = $('#fx'), bannerEl = $('#banner');
+  const ui = {
+    score: $('#hud-score'), time: $('#hud-time'), best: $('#hud-best'), statTime: $('#stat-time'), statBest: $('#stat-best'),
+    progress: $('#progress'), fill: $('#progress-fill'), speed: $('#hud-speed'), next: $('#hud-next'), streak: $('#hud-streak'),
+    pause: $('#btn-pause'), soundHud: $('#btn-sound-hud'), soundStart: $('#btn-sound-start'),
+    start: $('#screen-start'), paused: $('#screen-pause'), over: $('#screen-over'),
+    startBest: $('#start-best'), startBestMode: $('#start-best-mode'), themeName: $('#theme-name'), preview: $('#preview'),
+    live: $('#sr-live'),
+  };
+
+  // Build the nine holes. Key hints match number keys 1–9 in reading order.
+  const holes = [];
+  for (let i = 0; i < 9; i++) {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'hole';
+    el.dataset.index = String(i);
+    el.setAttribute('aria-label', `Hole ${i + 1}`);
+    el.innerHTML = '<span class="hole-shadow"></span><span class="hole-rim"></span><span class="hole-pit"></span>' +
+      '<span class="critter-mask"><span class="critter"><span class="face"></span><span class="dizzy">💫</span></span></span>' +
+      `<span class="hole-lip"></span><span class="hole-glow"></span><span class="key-hint">${i + 1}</span>`;
+    boardEl.appendChild(el);
+    holes.push({ el, critterEl: el.querySelector('.critter'), faceEl: el.querySelector('.face'), glowEl: el.querySelector('.hole-glow'), c: null, lastTransform: '' });
+  }
+
+  /* =======================================================================
+     STATE
+     ======================================================================= */
+  const S = {
+    phase: 'menu',          // menu | playing | paused | over | results
+    difficulty: store.get().difficulty,
+    theme: store.get().theme,
+    time: 0,                // game-clock ms; only advances while playing
+    lastNow: 0,
+    score: 0, hits: 0, whiffs: 0, escaped: 0, streak: 0, bestStreak: 0, decoysHit: 0,
+    tier: 'easy', topTier: 'easy',
+    nextSpawnAt: 0, recent: [], lastKind: -1, seq: 0,
+    lastSecond: -1, warned: false,
+    prevBest: 0, newBest: false,
+    rafId: 0, overTimer: 0, countRaf: 0,
+    frames: 0, loopStarts: 0,
+  };
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp01 = (t) => (t < 0 ? 0 : t > 1 ? 1 : t);
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const easeOutBack = (t) => { const c1 = 1.7, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+  const easeInQuad = (t) => t * t;
+  const diff = () => DIFFICULTIES[S.difficulty];
+  const theme = () => THEMES[S.theme];
+  const getBest = () => store.get().best[S.difficulty] || 0;
+  const announce = (msg) => { ui.live.textContent = ''; requestAnimationFrame(() => { ui.live.textContent = msg; }); };
+
+  function tierFor(score) {
+    const d = diff();
+    return score >= d.frenzy ? 'frenzy' : score >= d.fast ? 'fast' : 'easy';
+  }
+
+  /** Spawn parameters for the current score. */
+  function params() {
+    const d = diff(), key = tierFor(S.score), t = TIERS[key];
+    let p;
+    if (key === 'easy') p = S.score / d.fast;
+    else if (key === 'fast') p = (S.score - d.fast) / (d.frenzy - d.fast);
+    else p = (S.score - d.frenzy) / FRENZY_RAMP;
+    p = clamp01(p);
+    return {
+      key,
+      visible: Math.max(MIN_VISIBLE_MS, lerp(t.visible[0], t.visible[1], p) * d.speed),
+      gap: lerp(t.gap[0], t.gap[1], p) * d.speed,
+      afterHit: t.afterHit,
+      maxActive: t.maxActive,
+      multi: lerp(t.multi[0], t.multi[1], p),
+      decoy: lerp(t.decoy[0], t.decoy[1], p),
+    };
+  }
+
+  /* =======================================================================
+     CRITTERS
+     ======================================================================= */
+  const isActive = (c) => c && c.state === 'up';
+  const activeCount = () => holes.reduce((n, h) => n + (isActive(h.c) ? 1 : 0), 0);
+
+  function spawn(p, riseMs = RISE_MS) {
+    const free = [];
+    for (let i = 0; i < 9; i++) if (!holes[i].c) free.push(i);
+    if (!free.length) return false;
+    // Avoid the last two holes when possible so the pattern never feels repetitive.
+    let pool = free.filter((i) => !S.recent.includes(i));
+    if (!pool.length) pool = free;
+    const i = pool[(Math.random() * pool.length) | 0];
+    S.recent.push(i); if (S.recent.length > 2) S.recent.shift();
+
+    const list = theme().critters;
+    // Decoys never appear as the only thing on the board, so there is always something worth bonking.
+    const decoy = activeCount() > 0 && Math.random() < p.decoy;
+    let kind = -1;
+    if (!decoy) {
+      kind = (Math.random() * list.length) | 0;
+      if (kind === S.lastKind) kind = (kind + 1 + ((Math.random() * (list.length - 1)) | 0)) % list.length;
+      S.lastKind = kind;
+    }
+
+    const visible = p.visible * rand(0.9, 1.1);
+    const born = S.time;
+    const c = { id: ++S.seq, kind, decoy, state: 'up', born, upAt: born + riseMs, leaveAt: born + riseMs + visible, goneAt: born + riseMs + visible + RETREAT_MS, hitAt: 0 };
+    const h = holes[i];
+    h.c = c;
+    h.faceEl.textContent = decoy ? theme().decoy[0] : list[kind][0];
+    h.critterEl.classList.remove('is-hit');
+    h.el.classList.add('is-up');
+    h.el.classList.toggle('is-decoy', decoy);
+    h.el.setAttribute('aria-label', decoy ? `Hole ${i + 1}: ${theme().decoy[1]}, do not hit` : `Hole ${i + 1}: ${list[kind][1]}!`);
+    return true;
+  }
+
+  function clearHole(i) {
+    const h = holes[i];
+    h.c = null;
+    h.critterEl.classList.remove('is-hit');
+    h.el.classList.remove('is-up', 'is-decoy');
+    h.el.setAttribute('aria-label', `Hole ${i + 1}`);
+    setTransform(h, `translate3d(0, ${Y_HIDDEN}%, 0)`);
+  }
+
+  function setTransform(h, tf) {
+    if (h.lastTransform !== tf) { h.critterEl.style.transform = tf; h.lastTransform = tf; }
+  }
+
+  /** A critter can be bonked while rising, up, and during most of its retreat (generous = fair). */
+  function hittable(c) { return c && c.state === 'up' && S.time < c.leaveAt + RETREAT_MS * 0.7; }
+
+  /* =======================================================================
+     GAME LOOP — one requestAnimationFrame loop, game clock from real elapsed time.
+     ======================================================================= */
+  function startLoop() {
+    if (S.rafId) return;              // never run two loops
+    S.loopStarts++;
+    S.lastNow = performance.now();
+    S.rafId = requestAnimationFrame(frame);
+  }
+  function stopLoop() {
+    if (S.rafId) cancelAnimationFrame(S.rafId);
+    S.rafId = 0;
+  }
+  function frame(now) {
+    S.rafId = 0;
+    if (S.phase !== 'playing') return;
+    S.frames++;
+    // Real elapsed time since the last frame. A huge gap (device sleep without a visibility event)
+    // is capped so critters don't silently expire while the player could not see them.
+    const dt = Math.min(Math.max(0, now - S.lastNow), 250);
+    S.lastNow = now;
+    S.time += dt;
+    try {
+      update();
+      render();
+      hud();
+    } catch (err) {
+      console.error('[Critter Bonk] frame error', err);   // keep the game alive
+    }
+    if (S.time >= ROUND_MS) { endGame(); return; }
+    if (S.phase === 'playing') S.rafId = requestAnimationFrame(frame);
+  }
+
+  function update() {
+    const p = params();
+    for (let i = 0; i < 9; i++) {
+      const c = holes[i].c;
+      if (!c) continue;
+      if (S.time >= c.goneAt) {
+        if (c.state === 'up' && !c.decoy) {   // a real critter escaped un-bonked (avoided decoys are fine)
+          S.escaped++;
+          S.streak = 0;
+          S.nextSpawnAt = Math.max(S.nextSpawnAt, S.time + p.afterHit);
+        }
+        clearHole(i);
+      }
+    }
+    const active = activeCount();
+    // Keep the board lively: never leave it empty for longer than a short beat.
+    if (active === 0) S.nextSpawnAt = Math.min(S.nextSpawnAt, S.time + Math.min(p.gap, 420));
+    if (S.time >= S.nextSpawnAt) {
+      if (active < p.maxActive && spawn(p)) {
+        if (active + 1 < p.maxActive && Math.random() < p.multi) spawn(p, RISE_MS + 60);
+        S.nextSpawnAt = S.time + p.gap * rand(0.7, 1.3);
+      } else {
+        S.nextSpawnAt = S.time + 90;      // board full; check again shortly
+      }
+    }
+  }
+
+  function render() {
+    const t = S.time;
+    for (let i = 0; i < 9; i++) {
+      const h = holes[i], c = h.c;
+      if (!c) continue;
+      let r = 1, sx = 1, sy = 1, rot = 0;
+      if (c.state === 'up') {
+        if (t < c.upAt) r = easeOutBack(clamp01((t - c.born) / (c.upAt - c.born)));
+        else if (t < c.leaveAt) {
+          // A tiny "nervous" wiggle in the last 300ms telegraphs that the critter is about to leave.
+          const left = c.leaveAt - t;
+          if (left < 300 && !reduceMotion.matches) rot = Math.sin(t / 22) * 4;
+        } else r = 1 - easeInQuad(clamp01((t - c.leaveAt) / RETREAT_MS));
+      } else {
+        const k = t - c.hitAt;
+        if (k < 70) { const q = k / 70; sy = 1 - 0.28 * q; sx = 1 + 0.18 * q; }
+        else if (k < 200) { const q = (k - 70) / 130; sy = 0.72 + 0.28 * q; sx = 1.18 - 0.18 * q; rot = Math.sin(q * Math.PI * 2) * 10; }
+        else r = 1 - easeInQuad(clamp01((k - 200) / (HIT_MS - 200)));
+      }
+      const y = Y_UP + (1 - r) * (Y_HIDDEN - Y_UP);
+      setTransform(h, `translate3d(0, ${y.toFixed(2)}%, 0) rotate(${rot.toFixed(1)}deg) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`);
+    }
+  }
+
+  /* =======================================================================
+     INPUT → BONK
+     ======================================================================= */
+  function bonk(i, clientX, clientY) {
+    if (S.phase !== 'playing') return;
+    const h = holes[i];
+    const c = h.c;
+    const wrap = boardWrap.getBoundingClientRect();
+    let x, y;
+    if (clientX == null) {
+      const r = h.el.getBoundingClientRect();
+      x = r.left + r.width / 2 - wrap.left; y = r.top + r.height * 0.45 - wrap.top;
+    } else { x = clientX - wrap.left; y = clientY - wrap.top; }
+
+    if (hittable(c) && c.decoy) {
+      // Ouch! Bonking a decoy never costs points, but it counts as a miss and breaks the streak.
+      c.state = 'hit';
+      c.hitAt = S.time;
+      c.goneAt = S.time + HIT_MS;
+      S.whiffs++; S.decoysHit++;
+      S.streak = 0;
+      h.critterEl.classList.remove('is-hit'); void h.critterEl.offsetWidth; h.critterEl.classList.add('is-hit');
+      effects.ouch(h, x, y);
+      Sound.ouch();
+    } else if (hittable(c)) {
+      // Lock the critter first so overlapping input events can never score it twice.
+      c.state = 'hit';
+      c.hitAt = S.time;
+      c.goneAt = S.time + HIT_MS;
+      S.score++; S.hits++; S.streak++;
+      if (S.streak > S.bestStreak) S.bestStreak = S.streak;
+      const p = params();
+      S.nextSpawnAt = Math.max(S.nextSpawnAt, S.time + p.afterHit);
+      h.critterEl.classList.remove('is-hit'); void h.critterEl.offsetWidth; h.critterEl.classList.add('is-hit');
+      h.el.setAttribute('aria-label', `Hole ${i + 1}`);
+      effects.hit(h, x, y);
+      Sound.hit(S.streak);
+      bumpScore();
+      checkTier();
+      if (S.streak >= 5 && S.streak % 5 === 0) { showBanner(`${S.streak} in a row!`, 'streak'); Sound.streak(); }
+    } else if (!c || (c.state === 'up' && !c.decoy)) {
+      // Empty hole, or a critter that has already (almost) ducked away: a miss, with clear feedback.
+      S.whiffs++;
+      S.streak = 0;
+      effects.whiff(h, x, y, !!c);
+      Sound.miss();
+    }
+    // Bonking a critter that is already reacting to a hit does nothing (no score, no miss).
+    hud();
+  }
+
+  boardEl.addEventListener('pointerdown', (e) => {
+    const holeEl = e.target.closest('.hole');
+    if (!holeEl) return;
+    e.preventDefault();       // no focus steal, no text selection, no emulated mouse events
+    if (e.button !== undefined && e.button > 0) return;
+    bonk(Number(holeEl.dataset.index), e.clientX, e.clientY);
+  });
+  // Keyboard/assistive-tech activation of a focused hole arrives as a click with detail === 0.
+  boardEl.addEventListener('click', (e) => {
+    const holeEl = e.target.closest('.hole');
+    if (holeEl && e.detail === 0) bonk(Number(holeEl.dataset.index));
+  });
+  boardEl.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const active = document.activeElement;
+    const onControl = active && active !== document.body && (active.matches('button:not(.hole), input, select, a'));
+    if (/^[1-9]$/.test(e.key)) {
+      if (S.phase === 'playing') { e.preventDefault(); if (!e.repeat) bonk(Number(e.key) - 1); }
+      return;
+    }
+    if (e.key === ' ' || e.code === 'Space') {
+      // During play/pause Space always toggles pause (whatever has focus); the matching keyup is
+      // cancelled below so a focused button is never "clicked" a second time. In menus it stays native.
+      if (S.phase === 'playing' || S.phase === 'paused') { e.preventDefault(); if (!e.repeat) togglePause(); }
+      return;
+    }
+    if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') {
+      if (S.phase === 'playing') { e.preventDefault(); pause(); }
+      else if (S.phase === 'paused' && e.key !== 'Escape') { e.preventDefault(); resume(); }
+      return;
+    }
+    if (e.key === 'm' || e.key === 'M') { toggleSound(); return; }
+    if (e.key === 'Enter') {
+      if (onControl) return;                             // native button activation handles it
+      if (S.phase === 'menu' || S.phase === 'results') { e.preventDefault(); startGame(); }
+      else if (S.phase === 'paused') { e.preventDefault(); resume(); }
+    }
+  });
+  // Prevent Space's keyup from "clicking" a focused hole or the pause button during play.
+  document.addEventListener('keyup', (e) => {
+    if ((e.key === ' ' || e.code === 'Space') && (S.phase === 'playing' || S.phase === 'paused')) e.preventDefault();
+  });
+
+  /* =======================================================================
+     EFFECTS
+     ======================================================================= */
+  const effects = {
+    add(el) {
+      fxEl.appendChild(el);
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+      // Hard cap so effects can never accumulate (e.g. if animations are disabled).
+      while (fxEl.childElementCount > 90) fxEl.firstElementChild.remove();
+    },
+    hit(h, x, y) {
+      const colors = theme().particles;
+      const n = reduceMotion.matches ? 6 : 16;
+      const scale = boardWrap.clientWidth / 500;
+      for (let k = 0; k < n; k++) {
+        const el = document.createElement('span');
+        const star = k % 4 === 0;
+        el.className = star ? 'particle star' : 'particle';
+        if (star) el.textContent = '✦';
+        const ang = (Math.PI * 2 * k) / n + rand(-0.3, 0.3);
+        const dist = (reduceMotion.matches ? 30 : rand(45, 95)) * scale;
+        el.style.cssText = `left:${x}px;top:${y}px;--c:${colors[k % colors.length]};--s:${(star ? rand(20, 30) : rand(8, 15)) * scale}px;` +
+          `--dx:${(Math.cos(ang) * dist).toFixed(1)}px;--dy:${(Math.sin(ang) * dist - 18 * scale).toFixed(1)}px;--r:${rand(-180, 180) | 0}deg;--t:${rand(0.5, 0.75).toFixed(2)}s`;
+        this.add(el);
+      }
+      this.spawn('ring', x, y);
+      this.spawn('mallet', x, y, '🔨');
+      // "+1" rises from just above the critter's head so it never covers the face or the mallet
+      const holeRect = h.el.getBoundingClientRect(), wrapRect = boardWrap.getBoundingClientRect();
+      this.spawn('pop', holeRect.left + holeRect.width / 2 - wrapRect.left, holeRect.top + holeRect.height * 0.12 - wrapRect.top, '+1');
+      h.glowEl.classList.remove('flash', 'whiff'); void h.glowEl.offsetWidth; h.glowEl.classList.add('flash');
+      this.shake(4);
+    },
+    ouch(h, x, y) {
+      const scale = boardWrap.clientWidth / 500;
+      this.spawn('ring ring-bad', x, y);
+      this.spawn('mallet', x, y, '🔨');
+      const holeRect = h.el.getBoundingClientRect(), wrapRect = boardWrap.getBoundingClientRect();
+      this.spawn('pop small', holeRect.left + holeRect.width / 2 - wrapRect.left, holeRect.top + holeRect.height * 0.16 - wrapRect.top, 'Ouch! Streak lost');
+      h.glowEl.classList.remove('flash', 'whiff'); void h.glowEl.offsetWidth; h.glowEl.classList.add('whiff');
+      this.shake(7 * Math.min(1.4, scale));
+    },
+    spawn(cls, x, y, text) {
+      const el = document.createElement('span');
+      el.className = cls;
+      if (text) el.textContent = text;
+      el.style.left = x + 'px'; el.style.top = y + 'px';
+      this.add(el);
+    },
+    whiff(h, x, y, late) {
+      h.glowEl.classList.remove('flash', 'whiff'); void h.glowEl.offsetWidth; h.glowEl.classList.add('whiff');
+      const scale = boardWrap.clientWidth / 500;
+      this.spawn('mallet', x, y, '🔨');
+      if (late) this.spawn('pop small', x, y - 20 * scale, 'Too slow!');
+      for (let k = 0; k < 4; k++) {
+        const el = document.createElement('span');
+        el.className = 'particle';
+        const ang = Math.PI + (Math.PI * k) / 3 + rand(-0.2, 0.2);
+        el.style.cssText = `left:${x}px;top:${y}px;--c:rgba(220,190,150,.7);--s:${rand(4, 7) * scale}px;--dx:${(Math.cos(ang) * 22 * scale).toFixed(1)}px;--dy:${(Math.sin(ang) * 16 * scale).toFixed(1)}px;--t:.35s`;
+        this.add(el);
+      }
+    },
+    shake(px) {
+      if (reduceMotion.matches || !boardWrap.animate) return;
+      try {
+        boardWrap.animate([
+          { transform: 'translate(0,0)' }, { transform: `translate(${px}px, ${-px / 2}px)` }, { transform: `translate(${-px}px, ${px / 2}px)` },
+          { transform: `translate(${px / 2}px, 0)` }, { transform: 'translate(0,0)' },
+        ], { duration: 170, easing: 'ease-out' });
+      } catch (e) { /* ignore */ }
+    },
+    clear() { fxEl.textContent = ''; },
+  };
+
+  function showBanner(text, kind) {
+    bannerEl.textContent = text;
+    bannerEl.dataset.kind = kind || '';
+    bannerEl.classList.remove('show'); void bannerEl.offsetWidth; bannerEl.classList.add('show');
+  }
+  function clearBanner() { bannerEl.classList.remove('show'); bannerEl.textContent = ''; }
+
+  function checkTier() {
+    const t = tierFor(S.score);
+    if (t === S.tier) return;
+    S.tier = t;
+    if (TIER_ORDER.indexOf(t) > TIER_ORDER.indexOf(S.topTier)) S.topTier = t;
+    showBanner(t === 'frenzy' ? '🔥 FRENZY!' : '⚡ FAST!', t);
+    Sound.tier(t);
+    announce(`Speed up: ${TIERS[t].label}`);
+    // Give the player a short breather to read the warning before the faster pace kicks in.
+    S.nextSpawnAt = Math.max(S.nextSpawnAt, S.time + 550);
+  }
+
+  /* =======================================================================
+     HUD
+     ======================================================================= */
+  const hudCache = {};
+  function setText(el, key, value) { if (hudCache[key] !== value) { hudCache[key] = value; el.textContent = value; } }
+  function setAttr(el, key, attr, value) { if (hudCache[key] !== value) { hudCache[key] = value; el.setAttribute(attr, value); } }
+
+  function hud(force) {
+    if (force) for (const k in hudCache) delete hudCache[k];
+    const remaining = Math.max(0, ROUND_MS - S.time);
+    const secs = Math.ceil(remaining / 1000);
+    setText(ui.score, 'score', String(S.score));
+    const best = getBest();
+    const beating = S.score > best && best >= 0 && S.phase !== 'menu' && S.score > 0;
+    setText(ui.best, 'best', String(beating ? S.score : best));
+    if (hudCache.beating !== beating) { hudCache.beating = beating; ui.statBest.classList.toggle('is-new', beating); }
+    setText(ui.time, 'time', String(secs));
+    setAttr(ui.progress, 'pnow', 'aria-valuenow', String(secs));
+    ui.fill.style.transform = `scaleX(${(remaining / ROUND_MS).toFixed(4)})`;
+    const level = remaining <= DANGER_MS && S.phase !== 'menu' ? 'danger' : remaining <= WARN_MS ? 'warn' : 'ok';
+    if (hudCache.level !== level) {
+      hudCache.level = level;
+      ui.progress.dataset.level = level;
+      ui.statTime.classList.toggle('warn', level === 'warn');
+      ui.statTime.classList.toggle('danger', level === 'danger');
+      app.classList.toggle('danger', level === 'danger');
+    }
+    const tier = tierFor(S.score);
+    if (hudCache.tier !== tier) { hudCache.tier = tier; ui.speed.dataset.tier = tier; ui.speed.textContent = TIERS[tier].label; }
+    const d = diff();
+    const next = tier === 'easy' ? `Fast at ${d.fast}` : tier === 'fast' ? `Frenzy at ${d.frenzy}` : 'Max speed!';
+    setText(ui.next, 'next', next);
+    setText(ui.streak, 'streak', `🔥 x${S.streak}`);
+    const showStreak = S.streak >= 3;
+    if (hudCache.showStreak !== showStreak) { hudCache.showStreak = showStreak; ui.streak.classList.toggle('off', !showStreak); }
+
+    // Timer warnings (only while playing)
+    if (S.phase === 'playing') {
+      if (!S.warned && remaining <= WARN_MS) { S.warned = true; Sound.warn(); announce('10 seconds left'); }
+      if (remaining <= DANGER_MS && secs !== S.lastSecond && secs > 0) Sound.tick(secs);
+      S.lastSecond = secs;
+    }
+  }
+  function bumpScore() { ui.score.classList.remove('bump'); void ui.score.offsetWidth; ui.score.classList.add('bump'); }
+
+  /* =======================================================================
+     FLOW: start / pause / resume / end / menu
+     ======================================================================= */
+  function resetRound() {
+    stopLoop();
+    clearTimeout(S.overTimer); S.overTimer = 0;
+    cancelAnimationFrame(S.countRaf); S.countRaf = 0;
+    confetti.stop();
+    effects.clear();
+    clearBanner();
+    for (let i = 0; i < 9; i++) clearHole(i);
+    Object.assign(S, {
+      time: 0, score: 0, hits: 0, whiffs: 0, escaped: 0, streak: 0, bestStreak: 0, decoysHit: 0,
+      tier: 'easy', topTier: 'easy', nextSpawnAt: 0, recent: [], lastKind: -1,
+      lastSecond: -1, warned: false, newBest: false,
+    });
+    app.classList.remove('is-paused');
+  }
+
+  function hideScreens() { ui.start.hidden = true; ui.paused.hidden = true; ui.over.hidden = true; }
+
+  function startGame() {
+    Sound.unlock();
+    resetRound();
+    S.prevBest = getBest();
+    S.phase = 'playing';
+    hideScreens();
+    // First critter appears in the same user interaction, and is immediately bonkable.
+    const p = params();
+    spawn(p, 110);
+    S.nextSpawnAt = p.gap;
+    render();
+    hud(true);
+    Sound.start();
+    startLoop();
+    announce('Game started. 30 seconds!');
+  }
+
+  function pause() {
+    if (S.phase !== 'playing') return;
+    S.phase = 'paused';
+    stopLoop();
+    app.classList.add('is-paused');
+    ui.pause.textContent = '▶️'; ui.pause.setAttribute('aria-label', 'Resume game');
+    ui.paused.hidden = false;
+    $('#btn-resume').focus({ preventScroll: true });
+    Sound.click();
+  }
+  function resume() {
+    if (S.phase !== 'paused') return;
+    S.phase = 'playing';
+    ui.paused.hidden = true;
+    app.classList.remove('is-paused');
+    ui.pause.textContent = '⏸️'; ui.pause.setAttribute('aria-label', 'Pause game');
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    Sound.click();
+    startLoop();      // resets lastNow, so paused time is never counted
+  }
+  function togglePause() { if (S.phase === 'playing') pause(); else if (S.phase === 'paused') resume(); }
+
+  function endGame() {
+    if (S.phase !== 'playing') return;
+    S.phase = 'over';
+    stopLoop();
+    for (let i = 0; i < 9; i++) {           // everyone ducks down
+      const h = holes[i];
+      if (h.c) { h.critterEl.style.transition = 'transform .25s ease-in'; clearHole(i); setTimeout(() => { h.critterEl.style.transition = ''; }, 300); }
+    }
+    hud();
+    const data = store.get();
+    S.newBest = S.score > S.prevBest;
+    if (S.newBest) { data.best[S.difficulty] = S.score; store.save(); }
+    showBanner("⏰ Time's up!", 'over');
+    Sound.over();
+    S.overTimer = setTimeout(showResults, 1050);
+  }
+
+  const MESSAGES = [
+    [0, 'The critters win this round!'], [5, 'Warming up!'], [12, 'Nice bonking!'],
+    [20, 'Speedy paws!'], [30, 'Garden guardian!'], [40, 'Bonk master!'], [55, 'Legendary bonker!'],
+  ];
+
+  function showResults() {
+    S.overTimer = 0;
+    if (S.phase !== 'over') return;
+    S.phase = 'results';
+    clearBanner();
+    const elapsed = Math.min(S.time, ROUND_MS);                    // actual game duration
+    const swings = S.hits + S.whiffs;
+    const acc = swings > 0 ? Math.round((S.hits / swings) * 100) : 0;
+    const hpm = elapsed > 0 ? Math.round(S.hits / (elapsed / 60000)) : 0;
+    let msg = MESSAGES[0][1];
+    for (const [min, m] of MESSAGES) if (S.score >= min) msg = m;
+    if (S.newBest) msg = S.prevBest > 0 ? 'You beat your record!' : 'First record set!';
+    $('#over-msg').textContent = msg;
+    $('#st-hits').textContent = String(S.hits);
+    $('#st-acc').textContent = acc + '%';
+    $('#st-hpm').textContent = String(hpm);
+    $('#st-streak').textContent = String(S.bestStreak);
+    $('#st-escaped').textContent = String(S.escaped);
+    $('#st-tier').textContent = TIERS[S.topTier].label;
+    $('#over-new').hidden = !S.newBest;
+    const best = getBest();
+    const bestEl = $('#over-best');
+    if (S.newBest) bestEl.textContent = S.prevBest > 0 ? `Previous best: ${S.prevBest} → new best: ${best} (${diff().label})` : `Best (${diff().label}): ${best}`;
+    else if (S.score === best && best > 0) bestEl.textContent = `You tied your best of ${best}! So close!`;
+    else bestEl.textContent = `Best (${diff().label}): ${best} — ${best - S.score} more to beat it!`;
+    ui.over.hidden = false;
+    countUp($('#over-score'), S.score);
+    if (S.newBest) Sound.fanfare();
+    confetti.burst(S.newBest ? 220 : 90);
+    $('#btn-again').focus({ preventScroll: true });
+    announce(`Game over. You scored ${S.score}. Accuracy ${acc} percent.${S.newBest ? ' New high score!' : ''}`);
+  }
+
+  function countUp(el, target) {
+    cancelAnimationFrame(S.countRaf);
+    el.classList.remove('land');
+    if (reduceMotion.matches || target === 0) { el.textContent = String(target); el.classList.add('land'); return; }
+    const dur = Math.min(900, 300 + target * 25), t0 = performance.now();
+    const step = (now) => {
+      const q = clamp01((now - t0) / dur);
+      el.textContent = String(Math.round(target * (1 - Math.pow(1 - q, 3))));
+      if (q < 1) S.countRaf = requestAnimationFrame(step);
+      else { S.countRaf = 0; void el.offsetWidth; el.classList.add('land'); }
+    };
+    S.countRaf = requestAnimationFrame(step);
+  }
+
+  function goMenu() {
+    resetRound();
+    S.phase = 'menu';
+    hideScreens();
+    ui.pause.textContent = '⏸️'; ui.pause.setAttribute('aria-label', 'Pause game');
+    refreshMenu();
+    hud(true);
+    ui.start.hidden = false;
+    $('#btn-start').focus({ preventScroll: true });
+  }
+
+  /* =======================================================================
+     CONFETTI (canvas, self-stopping)
+     ======================================================================= */
+  const confetti = (() => {
+    const cv = $('#confetti');
+    let ctx2d = null, raf = 0, pieces = [], last = 0, t0 = 0;
+    try { ctx2d = cv.getContext('2d'); } catch (e) { ctx2d = null; }
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.floor(innerWidth * dpr); cv.height = Math.floor(innerHeight * dpr);
+      if (ctx2d) ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; pieces = []; if (ctx2d) ctx2d.clearRect(0, 0, cv.width, cv.height); }
+    function burst(n) {
+      stop();
+      if (!ctx2d || reduceMotion.matches) return;
+      resize();
+      const colors = theme().particles.concat(['#ff6f91', '#6fb6ff']);
+      for (let i = 0; i < n; i++) {
+        pieces.push({ x: innerWidth / 2 + rand(-60, 60), y: innerHeight * 0.38, vx: rand(-7, 7), vy: rand(-15, -5),
+          w: rand(6, 11), h: rand(8, 15), rot: rand(0, 6.28), vr: rand(-0.25, 0.25), c: colors[i % colors.length], wob: rand(0, 6.28) });
+      }
+      last = t0 = performance.now();
+      raf = requestAnimationFrame(tick);
+    }
+    function tick(now) {
+      const dt = Math.min(48, now - last) / 16.67; last = now;
+      ctx2d.clearRect(0, 0, innerWidth, innerHeight);
+      let alive = 0;
+      for (const p of pieces) {
+        p.vy += 0.32 * dt; p.vx *= Math.pow(0.985, dt); p.wob += 0.15 * dt;
+        p.x += (p.vx + Math.sin(p.wob) * 0.8) * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+        if (p.y < innerHeight + 30) alive++;
+        ctx2d.save(); ctx2d.translate(p.x, p.y); ctx2d.rotate(p.rot); ctx2d.fillStyle = p.c;
+        ctx2d.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.wob))); ctx2d.restore();
+      }
+      if (alive && now - t0 < 6000) raf = requestAnimationFrame(tick); else stop();
+    }
+    return { burst, stop, get running() { return !!raf; } };
+  })();
+
+  /* =======================================================================
+     MENU / PREFERENCES
+     ======================================================================= */
+  function applyTheme(name) {
+    S.theme = THEMES[name] ? name : 'twilight';
+    document.documentElement.dataset.theme = S.theme;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme().color);
+    ui.themeName.textContent = theme().name;
+    $('#title-l').textContent = theme().title[0];
+    $('#title-r').textContent = theme().title[1];
+    const [dEmoji, dName, dWhy] = theme().decoy;
+    $('#decoy-tip').innerHTML = `⚠️ From <b>Fast</b> speed, don't bonk the <span>${dEmoji}</span> ${dName}, ${dWhy}!`;
+    ui.preview.innerHTML = theme().critters.map((c, i) => `<span style="--i:${i}" title="${c[1]}">${c[0]}</span>`).join('');
+    // decorative flowers/props on the board edges
+    boardWrap.querySelectorAll('.decor').forEach((el) => el.remove());
+    const spots = [['-3%', '-3%'], ['auto', '-2.5%', '-3%'], ['-3%', 'auto', 'auto', '-3%'], ['auto', 'auto', '-3%', '-2.5%']];
+    theme().decor.forEach((d, i) => {
+      const el = document.createElement('span');
+      el.className = 'decor'; el.textContent = d; el.setAttribute('aria-hidden', 'true');
+      const [top, left = 'auto', bottom = 'auto', right = 'auto'] = spots[i];
+      Object.assign(el.style, { top, left, bottom, right });
+      boardWrap.appendChild(el);
+    });
+  }
+  function refreshMenu() {
+    ui.startBest.textContent = String(getBest());
+    ui.startBestMode.textContent = diff().label;
+    document.querySelectorAll('input[name="difficulty"]').forEach((r) => { r.checked = r.value === S.difficulty; });
+    document.querySelectorAll('input[name="theme"]').forEach((r) => { r.checked = r.value === S.theme; });
+  }
+  function renderSound() {
+    const on = Sound.enabled;
+    ui.soundHud.textContent = on ? '🔊' : '🔇';
+    ui.soundHud.setAttribute('aria-pressed', String(on));
+    ui.soundHud.setAttribute('aria-label', on ? 'Sound on. Press to mute' : 'Sound off. Press to unmute');
+    ui.soundStart.textContent = on ? '🔊' : '🔇';
+    ui.soundStart.setAttribute('aria-pressed', String(on));
+    ui.soundStart.setAttribute('aria-label', on ? 'Sound on. Press to mute' : 'Sound off. Press to unmute');
+  }
+  function toggleSound() {
+    Sound.unlock();
+    Sound.setEnabled(!Sound.enabled);
+    store.get().sound = Sound.enabled; store.save();
+    renderSound();
+    Sound.click();
+  }
+
+  document.querySelectorAll('input[name="difficulty"]').forEach((r) => r.addEventListener('change', () => {
+    S.difficulty = r.value; store.get().difficulty = r.value; store.save(); refreshMenu(); hud(true); Sound.unlock(); Sound.click();
+  }));
+  document.querySelectorAll('input[name="theme"]').forEach((r) => r.addEventListener('change', () => {
+    applyTheme(r.value); store.get().theme = S.theme; store.save(); Sound.unlock(); Sound.click();
+  }));
+  $('#btn-start').addEventListener('click', startGame);
+  $('#btn-again').addEventListener('click', startGame);
+  $('#btn-restart').addEventListener('click', startGame);
+  $('#btn-menu').addEventListener('click', () => { Sound.click(); goMenu(); });
+  $('#btn-quit').addEventListener('click', () => { Sound.click(); goMenu(); });
+  $('#btn-resume').addEventListener('click', resume);
+  ui.pause.addEventListener('click', togglePause);
+  ui.soundHud.addEventListener('click', toggleSound);
+  ui.soundStart.addEventListener('click', toggleSound);
+
+  // Auto-pause when the tab is hidden or the window loses focus mid-game.
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+  window.addEventListener('blur', () => pause());
+
+  /* =======================================================================
+     SCENERY (stars + fireflies) — generated once.
+     ======================================================================= */
+  (function buildScene() {
+    const sky = $('#sky'), ff = $('#fireflies');
+    let html = '';
+    for (let i = 0; i < 70; i++) {
+      const s = rand(1, 2.8).toFixed(1);
+      html += `<span style="left:${rand(0, 100).toFixed(1)}%;top:${(Math.pow(Math.random(), 1.4) * 62).toFixed(1)}%;width:${s}px;height:${s}px;--d:${rand(2, 5).toFixed(1)}s;--delay:-${rand(0, 5).toFixed(1)}s"></span>`;
+    }
+    sky.innerHTML = html;
+    html = '';
+    for (let i = 0; i < 12; i++) {
+      html += `<span style="left:${rand(2, 98).toFixed(1)}%;top:${rand(45, 95).toFixed(1)}%;--d:${rand(7, 13).toFixed(1)}s;--delay:-${rand(0, 12).toFixed(1)}s;--dx:${rand(-60, 60) | 0}px;--dy:${rand(-70, -20) | 0}px"></span>`;
+    }
+    ff.innerHTML = html;
+  })();
+
+  /* =======================================================================
+     INIT
+     ======================================================================= */
+  applyTheme(S.theme);
+  refreshMenu();
+  renderSound();
+  hud(true);
+  $('#btn-start').focus({ preventScroll: true });
+
+  // Read-only hook for automated tests / debugging. Exposes no way to change the game.
+  window.CritterBonk = Object.freeze({
+    version: '1.0.0',
+    snapshot: () => ({
+      phase: S.phase, score: S.score, hits: S.hits, whiffs: S.whiffs, escaped: S.escaped, streak: S.streak, bestStreak: S.bestStreak,
+      time: S.time, remaining: Math.max(0, ROUND_MS - S.time), tier: tierFor(S.score), difficulty: S.difficulty, theme: S.theme,
+      up: holes.map((h) => (h.c ? (h.c.decoy && h.c.state === 'up' ? 'decoy' : h.c.state) : null)), params: params(), decoysHit: S.decoysHit, newBest: S.newBest, best: getBest(),
+      loopRunning: !!S.rafId, loopStarts: S.loopStarts, frames: S.frames, fxNodes: fxEl.childElementCount, confetti: confetti.running,
+      sound: Sound.enabled,
+    }),
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "critter-bonk-tests",
+  "private": true,
+  "description": "Headless-browser tests for Critter Bonk. Not needed to play or deploy the game.",
+  "scripts": {
+    "test": "node browser-test.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  }
+}

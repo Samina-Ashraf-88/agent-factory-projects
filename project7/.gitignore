@@ -1,0 +1,15 @@
+# Test tooling (not needed to play or deploy)
+node_modules/
+tests/node_modules/
+tests/screenshots/
+package-lock.json
+
+# Netlify CLI local state
+.netlify/
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
