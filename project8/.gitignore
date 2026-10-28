@@ -1,0 +1,12 @@
+# Deploy bundle (rebuilt from the files here)
+*.zip
+
+# Netlify CLI local state
+.netlify/
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/

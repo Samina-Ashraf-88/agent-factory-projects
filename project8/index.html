@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Samina Ashraf | AI agents and automation</title>
+  <meta name="description" content="Samina Ashraf is a geologist and geophysicist who builds AI agents and automations, including an agent that turns meeting transcripts into Trello cards and daily briefings.">
+  <meta name="author" content="Samina Ashraf">
+  <meta name="theme-color" content="#F7F4EE">
+
+  <!-- Social sharing. If the site address changes, update og:image and og:url (see README). -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Samina Ashraf | AI agents and automation">
+  <meta property="og:description" content="Geologist and geophysicist building AI agents that turn repetitive work into finished tasks.">
+  <meta property="og:image" content="https://euphonious-rugelach-d164c3.netlify.app/assets/images/og-image.png">
+  <meta property="og:url" content="https://euphonious-rugelach-d164c3.netlify.app/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top" aria-label="Samina Ashraf, back to top">SA</a>
+      <nav aria-label="Main">
+        <ul class="nav-list">
+          <li><a href="#work">Work</a></li>
+          <li class="nav-optional"><a href="#skills">Skills</a></li>
+          <li class="nav-optional"><a href="#about">About</a></li>
+          <li><a class="btn btn-small" href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div class="hero-text">
+          <p class="hero-name">Samina Ashraf</p>
+          <p class="hero-role">Geologist <span aria-hidden="true">·</span> Geophysicist <span aria-hidden="true">·</span> AI agent builder</p>
+          <h1 id="hero-title">I build AI agents that turn messy, repetitive work into finished tasks.</h1>
+          <p class="hero-lede">My latest agent reads a meeting transcript, files every action item as a Trello card with an owner and due date, and writes the next morning's briefing. I'm now studying IT and AI, and I test what I build before I ship it.</p>
+          <div class="actions">
+            <a class="btn" href="https://www.linkedin.com/in/samina-ashraf-235677a1/" rel="me">Message me on LinkedIn</a>
+            <a class="btn btn-ghost" href="#work">See the meeting agent</a>
+          </div>
+        </div>
+
+        <!-- Proof at first glance: links to the featured project -->
+        <a class="hero-proof" href="#work">
+          <img src="assets/images/meeting-action-items-board.webp" width="1070" height="710" decoding="async"
+               alt="Trello board of action items that Samina's meeting agent created automatically.">
+          <span class="hero-proof-caption">
+            <span class="hero-proof-label">Latest build</span>
+            AI Meeting Assistant: 5 custom skills that turn a transcript into these Trello cards
+          </span>
+        </a>
+      </div>
+      <img class="trace" src="assets/images/seismic-trace.svg" alt="" width="1200" height="80">
+    </section>
+
+    <!-- FEATURED PROJECT -->
+    <section class="section" id="work" aria-labelledby="featured-title">
+      <div class="wrap">
+        <p class="label">Featured project</p>
+        <h2 id="featured-title">AI Meeting Assistant</h2>
+        <p class="section-lede">A meeting goes in. Decisions, an action-item list, Trello cards and a daily briefing come out, with no copying and pasting.</p>
+
+        <div class="featured">
+          <figure class="shot shot-main">
+            <img src="assets/images/meeting-action-items-board.webp" width="1070" height="710" loading="lazy" decoding="async"
+                 alt="Trello board titled Meeting Action Items with four cards in To Do, including 'Fix payments-timeout bug and confirm in staging', due Aug 1, and 'Finalize onboarding design mockups', due Aug 3.">
+            <figcaption>Trello cards the agent created from a sample 30-minute product meeting.</figcaption>
+          </figure>
+
+          <div class="featured-text">
+            <ol class="pipeline">
+              <li><strong>Read the meeting.</strong> Pulls the transcript from Fathom, a file, or pasted text.</li>
+              <li><strong>Summarise it.</strong> Writes a brief with decisions, action items with owners, and open questions.</li>
+              <li><strong>Create the tasks.</strong> One Trello card per action item, with owner, due date and priority label.</li>
+              <li><strong>Report daily.</strong> A Morning Briefing at 08:00 and an End-of-Day report at 18:00 on weekdays.</li>
+            </ol>
+
+            <h3>My role</h3>
+            <p>I planned the work as four milestones and tracked them on their own Trello board. I connected Fathom and Trello through a single managed-OAuth key and chose where the reports are delivered. I directed an AI coding agent to build five custom skills, then checked their output against a sample meeting.</p>
+
+            <p class="tags" aria-label="Built with">
+              <span>OpenClaw</span><span>Custom agent skills</span><span>Fathom API</span><span>Trello API</span><span>Managed OAuth</span><span>Cron scheduling</span>
+            </p>
+
+            <p class="status"><strong>Status:</strong> all four milestones are complete. Moving report delivery to Discord is waiting on an admin permission.</p>
+
+            <a class="text-link" href="https://github.com/Samina-Ashraf-88/agent-factory-projects/tree/main/project2">Read the Meeting Assistant source on GitHub</a>
+          </div>
+
+          <figure class="shot shot-wide">
+            <img src="assets/images/openclaw-workspace-skills.webp" width="1520" height="530" loading="lazy" decoding="async"
+                 alt="OpenClaw workspace skills panel listing five enabled skills: daily-reports, fathom, meeting-intelligence, meeting-to-trello and trello-api, each with a one-line description.">
+            <figcaption>The five custom skills behind it, enabled in OpenClaw.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- MORE WORK -->
+    <section class="section section-alt" aria-labelledby="more-title">
+      <div class="wrap">
+        <p class="label">More work</p>
+        <h2 id="more-title">Other things I've built and shipped</h2>
+        <p class="section-lede">I build with AI coding agents. I write the brief, review what comes back, and test it in a real browser or test suite before it ships.</p>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-art card-art-text" aria-hidden="true">
+              <span>Email</span><span>WhatsApp</span><span>Web form</span>
+              <span class="arrow">↓</span>
+              <span class="agent">Support agent</span>
+            </div>
+            <div class="card-body">
+              <h3>Flowbit Customer Success agent</h3>
+              <p>A hackathon project: a 24/7 support agent that answers email, WhatsApp and web-form requests. It opens tickets, searches a knowledge base, escalates to a person when needed, and sends the reply.</p>
+              <p class="tags"><span>Python</span><span>OpenAI Agents SDK</span><span>FastAPI</span><span>Kafka</span><span>PostgreSQL + pgvector</span></p>
+              <p class="card-links"><a href="https://github.com/Samina-Ashraf-88/Hackathon-5">Flowbit source code</a></p>
+            </div>
+          </article>
+
+          <article class="card">
+            <img class="card-art" src="assets/images/snake-battle.webp" width="800" height="500" loading="lazy" decoding="async"
+                 alt="Snake Battle arena: three coloured AI snakes named Viper, Cobra and Mamba moving between glowing red fruit on a dark grid.">
+            <div class="card-body">
+              <h3>Snake Battle</h3>
+              <p>An arcade survival game against up to seven AI snakes. They path-find to food and avoid dead ends, and fallen snakes turn into food for everyone else.</p>
+              <p class="tags"><span>JavaScript</span><span>HTML Canvas</span><span>Web Audio</span><span>Netlify</span></p>
+              <p class="card-links">
+                <a href="https://serene-gingersnap-5a0371.netlify.app/">Play Snake Battle</a>
+                <a href="https://github.com/Samina-Ashraf-88/agent-factory-projects/tree/main/project6">Source</a>
+              </p>
+            </div>
+          </article>
+
+          <article class="card">
+            <img class="card-art" src="assets/images/critter-bonk.webp" width="800" height="500" loading="lazy" decoding="async"
+                 alt="Critter Bonk game: a bear pops out of one of nine numbered holes in a moonlit garden, with score, timer and best score above.">
+            <div class="card-body">
+              <h3>Critter Bonk</h3>
+              <p>A whack-a-critter game you can play by mouse, touch or keyboard. 70 automated browser checks cover scoring, timing and layouts down to a 320px phone.</p>
+              <p class="tags"><span>JavaScript</span><span>Accessibility</span><span>Puppeteer tests</span><span>Netlify</span></p>
+              <p class="card-links">
+                <a href="https://imaginative-frangipane-bbb42f.netlify.app/">Play Critter Bonk</a>
+                <a href="https://github.com/Samina-Ashraf-88/agent-factory-projects/tree/main/project7">Source</a>
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="wrap">
+        <p class="label">What I can do for you</p>
+        <h2 id="skills-title">Three kinds of work I take on</h2>
+
+        <div class="capabilities">
+          <div class="capability">
+            <h3>Automate a repetitive workflow</h3>
+            <p>Agents that connect to the tools your team already uses, run on a schedule, and report back, so follow-up work stops falling through the cracks.</p>
+            <p class="tools">OpenClaw skills · OpenAI Agents SDK · MCP servers · REST APIs and OAuth · Trello, Fathom, Gmail, WhatsApp</p>
+          </div>
+          <div class="capability">
+            <h3>Build a small web app or game</h3>
+            <p>Fast, accessible pages and browser games with no heavy dependencies, tested in a real browser and deployed to Netlify.</p>
+            <p class="tools">HTML · CSS · JavaScript · TypeScript · Python · Puppeteer · Netlify</p>
+          </div>
+          <div class="capability">
+            <h3>Get dependable work out of AI</h3>
+            <p>Clear briefs, custom skills and a habit of checking the AI's claims before relying on them. I've used this for research, LinkedIn posts and Canva designs.</p>
+            <p class="tools">Prompt and brief writing · Custom agent skills · Delegation records · Canva MCP</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section section-alt" id="about" aria-labelledby="about-title">
+      <div class="wrap about">
+        <div>
+          <p class="label">About</p>
+          <h2 id="about-title">From rock layers to AI agents</h2>
+        </div>
+        <div class="about-text">
+          <p>I'm a geologist and geophysicist. Both fields are built on evidence: you don't trust a map or a seismic section you can't check. I bring the same rule to AI. An agent is only useful if you can see what it did and confirm it was right.</p>
+          <p>I'm now studying IT and AI and learning in public. I build agent skills, take part in hackathons, and ship small web projects, all of it on GitHub.</p>
+          <p>I'm open to junior roles and internships in AI automation, freelance automation projects, and collaborations with people who have a workflow worth automating.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARNING -->
+    <section class="section" aria-labelledby="learning-title">
+      <div class="wrap">
+        <p class="label">Learning in public</p>
+        <h2 id="learning-title">What I'm working through</h2>
+        <ul class="learning">
+          <li>
+            <span class="learning-what">Studying IT and AI</span>
+            <span class="learning-detail">Current focus: AI agents, agent skills and automation.</span>
+          </li>
+          <li>
+            <a class="learning-what" href="https://github.com/Samina-Ashraf-88/Hackathon-5">Hackathon: Build my first 24/7 AI Employee</a>
+            <span class="learning-detail">From incubation to production. Built the Flowbit support agent above.</span>
+          </li>
+          <li>
+            <a class="learning-what" href="https://github.com/Samina-Ashraf-88/Hackathon-0">Hackathon: Personal AI Employee</a>
+            <span class="learning-detail">Building autonomous "full-time equivalent" agents, in Python.</span>
+          </li>
+          <li>
+            <a class="learning-what" href="https://github.com/Samina-Ashraf-88/open-ai-agents-sdk-projects">OpenAI Agents SDK practice projects</a>
+            <span class="learning-detail">Different kinds of agents, each built to learn one pattern.</span>
+          </li>
+          <li>
+            <a class="learning-what" href="https://github.com/Samina-Ashraf-88/agent-factory-projects/tree/main/project3">Delegation Records</a>
+            <span class="learning-detail">Worked examples of briefing an AI, checking its claims, and recording the decision.</span>
+          </li>
+          <!--
+            CERTIFICATES: copy this block for each verified certificate, and put the file in assets/certificate/.
+          <li>
+            <a class="learning-what" href="assets/certificate/YOUR-FILE.pdf">CERTIFICATE TITLE</a>
+            <span class="learning-detail">ISSUING ORGANISATION · MONTH YEAR</span>
+          </li>
+          -->
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="wrap">
+        <p class="label">Contact</p>
+        <h2 id="contact-title">Have a workflow an agent could take off your plate?</h2>
+        <p class="section-lede">Email me or message me on LinkedIn. Three lines are enough for me to tell you whether an agent can help:</p>
+        <ol class="brief-list">
+          <li><strong>The task:</strong> what you do by hand today</li>
+          <li><strong>The tools:</strong> where it happens (Trello, Gmail, Sheets, WhatsApp…)</li>
+          <li><strong>How often:</strong> daily, weekly, after every meeting</li>
+        </ol>
+        <p class="contact-note">Hiring for a role or internship? Message me the same way.</p>
+        <div class="actions">
+          <a class="btn" href="mailto:samina379@gmail.com?subject=A%20workflow%20to%20automate">Email me</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/samina-ashraf-235677a1/" rel="me">Message me on LinkedIn</a>
+          <a class="btn btn-ghost" href="https://github.com/Samina-Ashraf-88" rel="me">See my code on GitHub</a>
+        </div>
+        <p class="contact-email">Or write to <a href="mailto:samina379@gmail.com">samina379@gmail.com</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>© 2026 Samina Ashraf</p>
+      <p class="footer-links">
+        <a href="mailto:samina379@gmail.com">Email</a>
+        <a href="https://github.com/Samina-Ashraf-88" rel="me">GitHub</a>
+        <a href="https://www.linkedin.com/in/samina-ashraf-235677a1/" rel="me">LinkedIn</a>
+        <a href="#top">Back to top</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
