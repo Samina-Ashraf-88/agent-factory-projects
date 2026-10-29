@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "7 numbered topic headings: ## 1. Demand; ## 2. Supply; ## 3. ⚠️ Movement Along vs. Shift of the Curve (VERY IMPORTANT); ## 4. Equilibrium; ## 5. Price Elasticity of Demand (PED); ## 6. Price Controls; ## 7. Consumer & Producer Surplus"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": false,
+      "evidence": "sections missing bold key-terms list: ['## 1. Demand', '## 2. Supply', '## 3. ⚠️ Movement Along vs. Shift of the Curve (VERY IMPORTANT)', '## 4. Equilibrium', '## 5. Price Elasticity of Demand (PED)', '## 6. Price Controls', '## 7. Consumer & Producer Surplus']"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": false,
+      "evidence": "last h2='## ✅ Quick Self-Test'; numbered items=0"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['1. The price of coffee rises. What happens to demand for tea? For cream?', '2. Income rises and demand for bus rides falls. What kind of good are bus rides?', '3. A frost destroys orange crops. Is this a shift or a movement? Which curve moves?', '4. Price falls from $10 to $8 and Qd rises from 100 to 150. Find the PED with the midpoint method. Is demand elastic or inelastic?', '5. The government sets a minimum price above equilibrium. Is there a surplus or a shortage?']; final line: ''"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": false,
+      "evidence": "missing: ['%ΔQd / %ΔP|%ΔQd/%ΔP', '(new + old) / 2|(new+old)/2|(new + old)/2']"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 5,
+    "total": 6,
+    "pass_rate": 0.17
+  },
+  "info": []
+}

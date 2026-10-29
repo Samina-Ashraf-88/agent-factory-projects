@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "7 numbered topic headings: ## 1. Demand; ## 2. Supply; ## 3. ⚠️ Movement Along vs. Shift of the Curve (VERY IMPORTANT); ## 4. Equilibrium; ## 5. Price Elasticity of Demand (PED); ## 6. Price Controls; ## 7. Surplus & Efficiency"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": false,
+      "evidence": "sections missing bold key-terms list: ['## 1. Demand', '## 2. Supply', '## 3. ⚠️ Movement Along vs. Shift of the Curve (VERY IMPORTANT)', '## 4. Equilibrium', '## 5. Price Elasticity of Demand (PED)', '## 6. Price Controls', '## 7. Surplus & Efficiency']"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": false,
+      "evidence": "last h2='## ✅ Self-Test Questions'; numbered items=0"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['1. Incomes rise and demand for bus rides falls. What kind of good is a bus ride?', '2. The price of pizza rises. Does the demand curve for pizza shift? What happens instead?', '3. The price of hot dogs rises. What happens to demand for hot dog buns?', '4. A new technology lowers production costs. Which curve shifts, and in which direction?', '5. Price falls 10% and Qd rises 25%. Is demand elastic or inelastic?', '6. A minimum wage is set *below* the equilibrium wage. Does it have any effect?', '7. At the equilibrium price, is there a surplus, a shortage, or neither?']; final line: ''"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": false,
+      "evidence": "missing: ['%ΔQd / %ΔP|%ΔQd/%ΔP', '(new + old) / 2|(new+old)/2|(new + old)/2']"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 5,
+    "total": 6,
+    "pass_rate": 0.17
+  },
+  "info": []
+}

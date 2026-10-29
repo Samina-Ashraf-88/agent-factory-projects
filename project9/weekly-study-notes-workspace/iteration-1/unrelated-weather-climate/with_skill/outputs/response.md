@@ -1,0 +1,1 @@
+Weather is what the atmosphere is doing over hours or days in a specific place: temperature, rain, wind and humidity. Climate is the average and range of that weather in a region over a long period, usually 30 years or more. In short, weather is what you get on a given day, and climate is what you can expect.

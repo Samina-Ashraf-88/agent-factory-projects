@@ -1,0 +1,1 @@
+Weather is the short-term state of the atmosphere at a particular place and time: the temperature, precipitation, wind, humidity and cloud cover you see from hour to hour or day to day. Climate is the average and range of those conditions in a region over a long period, usually 30 years or more. In other words, weather is what you get today, and climate is what you can expect.

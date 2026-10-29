@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: weekly-lecture-revision
+expected_outcome: |
+  The skill is invoked from the phrase 'organize my weekly lecture notes for revision'. History notes are organized by topic with bold key terms, dates preserved exactly, typos fixed, and exactly three review questions at the end.

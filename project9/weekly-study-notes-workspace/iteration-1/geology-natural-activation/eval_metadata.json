@@ -1,0 +1,12 @@
+{
+  "eval_name": "geology-natural-activation",
+  "prompt": "Make study notes from this:\n\nGeology — Week 1\n\n- Geology is the scientific study of Earth, its materials, structure, history, and processes.\n- Minerals are naturally occurring inorganic solids with a definite chemical composition and an ordered internal structure.\n- Rocks are aggregates of one or more minerals.\n- The three main rock types are igneous, sedimentary, and metamorphic.\n- Igneous rocks form when magma or lava cools and solidifies.\n- Sedimentary rocks form through deposition, compaction, and cementation, or other sediment-forming processes.\n- Metamorphic rocks form when existing rocks change because of heat, pressure, or chemically active fluids.\n- The rock cycle describes how rocks can transform from one type to another over geological time.\n- Plate tectonics explains the movement of Earth's lithospheric plates.\n- Earth's major layers are the crust, mantle, and core.",
+  "assertions": [
+    "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+    "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+    "Every topic section contains a 'Key terms' list in which each term is in bold.",
+    "The final section is '## Review Questions' and contains exactly three numbered questions.",
+    "No question appears outside the Review Questions section, and nothing follows the third review question.",
+    "All key source facts, dates, and formulas are preserved."
+  ]
+}

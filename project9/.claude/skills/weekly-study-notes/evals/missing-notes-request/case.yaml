@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: missing-notes-request
+expected_outcome: |
+  The response asks the user to provide their notes or class material and does not invent any week's content (no topic sections, no review questions).

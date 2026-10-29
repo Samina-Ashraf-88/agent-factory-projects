@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": false,
+      "evidence": "0 numbered topic headings: "
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": false,
+      "evidence": "sections missing bold key-terms list: none"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": false,
+      "evidence": "last h2='## Quick self-test'; numbered items=0"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['2. When did the Estates-General last meet before 1789?', '3. What did the Third Estate become, and what oath did it take?', '4. What three principles did the Declaration of the Rights of Man set out?', '5. Who led the Reign of Terror, and about how many people were officially executed?', '6. What event usually marks the end of the Revolution?']; final line: ''"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": true,
+      "evidence": "missing: none"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 5,
+    "total": 6,
+    "pass_rate": 0.17
+  },
+  "info": []
+}

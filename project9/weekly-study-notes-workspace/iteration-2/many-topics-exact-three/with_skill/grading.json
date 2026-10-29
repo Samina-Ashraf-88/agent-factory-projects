@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": true,
+      "evidence": "Skill tool calls: [{'skill': 'weekly-study-notes'}]"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "7 numbered topic headings: ## 1. Demand; ## 2. Supply; ## 3. Movement Along a Curve vs. Shift of a Curve; ## 4. Equilibrium; ## 5. Price Elasticity of Demand (PED); ## 6. Price Controls; ## 7. Consumer Surplus, Producer Surplus, and Total Surplus"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": true,
+      "evidence": "sections missing bold key-terms list: none"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": true,
+      "evidence": "last h2='## Review Questions'; numbered items=3"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['- **Question from class**: Why does a binding price ceiling cause a shortage?']; final line: \"3. A good's price rises from $4 to $6, and quantity demanded falls from 120 to 8\""
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": true,
+      "evidence": "missing: none"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "total": 6,
+    "pass_rate": 0.83
+  },
+  "info": []
+}

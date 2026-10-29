@@ -1,0 +1,1 @@
+Weather is the state of the atmosphere at a particular place and time, such as today's temperature, rain, wind or humidity, and it can change from minute to minute or day to day. Climate is the average pattern of weather in a region over a long period, usually 30 years or more, so it describes what conditions are typical there rather than what is happening right now.

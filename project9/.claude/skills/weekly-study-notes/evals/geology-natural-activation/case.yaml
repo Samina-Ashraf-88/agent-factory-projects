@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: geology-natural-activation
+expected_outcome: |
+  The weekly-study-notes skill is invoked without being named. The response is Geology study notes with a heading per topic, bold key terms per topic, all supplied facts preserved, and exactly three numbered review questions in a final Review Questions section.

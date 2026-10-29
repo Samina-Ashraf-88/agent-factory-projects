@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "7 numbered topic headings: ## 1. Demand; ## 2. Supply; ## 3. ⚠️ Movement Along vs. Shift of the Curve (VERY IMPORTANT); ## 4. Equilibrium; ## 5. Price Elasticity of Demand (PED); ## 6. Price Controls; ## 7. Consumer & Producer Surplus"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": false,
+      "evidence": "sections missing bold key-terms list: ['## 1. Demand', '## 2. Supply', '## 3. ⚠️ Movement Along vs. Shift of the Curve (VERY IMPORTANT)', '## 4. Equilibrium', '## 5. Price Elasticity of Demand (PED)', '## 6. Price Controls', '## 7. Consumer & Producer Surplus']"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": false,
+      "evidence": "last h2='## ✅ Quick Self-Test (answers below)'; numbered items=0"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['1. Income rises and demand for bus rides falls. What kind of good are bus rides?', '2. The price of pizza falls. Is this a shift of the pizza demand curve or a movement along it?', '3. A new technology lowers production costs. Which curve shifts, and in which direction?', '4. Price rises from $10 to $12 and Qd falls from 50 to 40. Use the midpoint method to find PED. Is demand elastic or inelastic?', '5. The government sets a minimum price above equilibrium. Is there a shortage or a surplus?', '6. A consumer would pay up to $15 for a ticket and pays $9. What is their consumer surplus?']; final line: ''"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": false,
+      "evidence": "missing: ['%ΔQd / %ΔP|%ΔQd/%ΔP', '(new + old) / 2|(new+old)/2|(new + old)/2']"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 5,
+    "total": 6,
+    "pass_rate": 0.17
+  },
+  "info": []
+}

@@ -1,0 +1,12 @@
+{
+  "eval_name": "weekly-lecture-revision",
+  "prompt": "Please organize my weekly lecture notes for revision.\n\nHIST 210 wk 5 lecture notes\n\nfrench rev - started 1789. causes: financial crisis (debt from wars incl american war of independance), bad harvests -> bread prices high, enlightenment ideas (rousseau, montesquieu)\nestates general may 1789 - first time since 1614. 3 estates: clergy, nobility, everyone else (3rd estate ~97% of pop)\n3rd estate broke off -> national assembly, tennis court oath june 20 1789\nstorming of bastille 14 july 1789 - now french national day\ndeclaration of rights of man and citizen aug 1789 - liberty, equality, popular sovereignty\nreign of terror 1793-94, robespierre, committee of public safety. ~17,000 official executions\nrobespierre executed july 1794 (thermidor)\nnapoleon coup 1799 - end of rev (usually)\nprof said: causes will def be on midterm!!",
+  "assertions": [
+    "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+    "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+    "Every topic section contains a 'Key terms' list in which each term is in bold.",
+    "The final section is '## Review Questions' and contains exactly three numbered questions.",
+    "No question appears outside the Review Questions section, and nothing follows the third review question.",
+    "All key source facts, dates, and formulas are preserved."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "7 numbered topic headings: ## 1. Demand; ## 2. Supply; ## 3. ⚠️ Movement vs. shift (very important); ## 4. Equilibrium; ## 5. Price Elasticity of Demand (PED); ## 6. Price Controls; ## 7. Consumer & Producer Surplus"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": false,
+      "evidence": "sections missing bold key-terms list: ['## 1. Demand', '## 2. Supply', '## 3. ⚠️ Movement vs. shift (very important)', '## 4. Equilibrium', '## 5. Price Elasticity of Demand (PED)', '## 6. Price Controls', '## 7. Consumer & Producer Surplus']"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": false,
+      "evidence": "last h2='## 🧠 Self-Test (answers at the bottom)'; numbered items=0"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['1. Incomes rise and demand for bus rides falls. What kind of good are bus rides?', '2. The price of coffee rises. What happens to demand for tea? Is that a shift or a movement?', '3. A new technology lowers production costs. Which curve shifts, and in which direction?', '4. Price goes from $10 to $8 and Qd goes from 50 to 70. Calculate PED with the midpoint method. Is demand elastic or inelastic?', '5. The government sets a price floor *below* equilibrium. What happens?', '6. Why is total surplus maximized at equilibrium?']; final line: ''"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": true,
+      "evidence": "missing: none"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 4,
+    "total": 6,
+    "pass_rate": 0.33
+  },
+  "info": []
+}

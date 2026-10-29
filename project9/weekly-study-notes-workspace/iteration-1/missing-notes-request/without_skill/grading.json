@@ -1,0 +1,27 @@
+{
+  "expectations": [
+    {
+      "text": "The response asks the user to paste, share, or attach their notes or class material.",
+      "passed": false,
+      "evidence": "I couldn't make your study notes. I didn't have permission to open your Zia Tutor AI learner record, so I can't see which course you're on or where you stopped. Without that, and without being able to read the book itself, I won't write notes from memory. You'd have no way to tell my guesses apart from what the book actually says.\n\nThe folder this session is working in is also empty, so there are "
+    },
+    {
+      "text": "The response contains no invented study-note content (no numbered topic headings, no Review Questions).",
+      "passed": true,
+      "evidence": "topic headings: 0"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 1,
+    "total": 2,
+    "pass_rate": 0.5
+  },
+  "info": [
+    {
+      "text": "(info) skill invoked",
+      "passed": false,
+      "evidence": "Skill tool calls: [{'skill': 'anthropic-skills:zia-tutor-ai', 'args': 'Prepare my study notes for this week.'}]"
+    }
+  ]
+}

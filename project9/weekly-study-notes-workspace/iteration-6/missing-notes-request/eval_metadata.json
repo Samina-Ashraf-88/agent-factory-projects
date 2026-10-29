@@ -1,0 +1,8 @@
+{
+  "eval_name": "missing-notes-request",
+  "prompt": "Prepare my study notes for this week.",
+  "assertions": [
+    "The response asks the user to paste, share, or attach their notes or class material.",
+    "The response contains no invented study-note content (no numbered topic headings, no Review Questions)."
+  ]
+}

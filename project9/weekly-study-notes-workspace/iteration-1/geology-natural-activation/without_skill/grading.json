@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "6 numbered topic headings: ## 1. What Is Geology?; ## 2. Minerals vs. Rocks; ## 3. The Three Rock Types; ## 4. The Rock Cycle; ## 5. Plate Tectonics; ## 6. Earth's Layers"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": false,
+      "evidence": "sections missing bold key-terms list: ['## 1. What Is Geology?', '## 2. Minerals vs. Rocks', '## 3. The Three Rock Types', '## 4. The Rock Cycle', '## 5. Plate Tectonics', \"## 6. Earth's Layers\"]"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": false,
+      "evidence": "last h2='## Quick Review Questions'; numbered items=0"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['## 1. What Is Geology?', '1. What five criteria must a substance meet to be a mineral?', '2. How is a rock different from a mineral?', '4. What three agents can turn an existing rock into a metamorphic rock?', '5. What does the rock cycle describe?', '6. What does plate tectonics explain?']; final line: ''"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": true,
+      "evidence": "missing: none"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 4,
+    "total": 6,
+    "pass_rate": 0.33
+  },
+  "info": []
+}

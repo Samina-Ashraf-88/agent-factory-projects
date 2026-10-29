@@ -1,0 +1,146 @@
+{
+  "results": [
+    {
+      "should_trigger": true,
+      "query": "Make study notes from this: psych lecture 3 - classical conditioning, pavlov's dogs, UCS -> UCR, CS paired w UCS -> CR. extinction = CR fades when CS shown w/o UCS. spontaneous recovery after rest period",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": true,
+      "query": "Prepare my weekly notes. here's everything from wk 6 of organic chem: alkanes single bonds, CnH2n+2. alkenes double bond CnH2n. alkynes triple bond. markovnikov rule - H adds to the carbon w more H's. isomers = same formula diff structure",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": true,
+      "query": "Turn these class notes into study notes pls\n\nIntro to Law wk2\n- tort = civil wrong causing harm\n- negligence needs duty, breach, causation, damage\n- donoghue v stevenson 1932 snail in ginger beer, neighbour principle\n- contributory negligence reduces damages",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": true,
+      "query": "Organize my notes for revision, they're a mess. CS201 week 3: big O = upper bound on growth. O(1) const, O(log n) binary search, O(n) linear scan, O(n log n) merge sort, O(n^2) bubble sort. space complexity too. amortized analysis - dynamic array append is O(1) amortized",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": true,
+      "query": "can u tidy up my spanish class notes into proper revision notes? preterite vs imperfect: preterite = completed actions, specific time (ayer, el año pasado). imperfect = habitual, ongoing, descriptions, age/time in past (cuando era niño). ser vs estar: ser permanent traits, estar location + states",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": true,
+      "query": "I've pasted my lecture notes from the last three physics classes below, I need to revise them over the weekend.\n\nNewton's 1st law - inertia. 2nd F=ma. 3rd equal & opposite. momentum p=mv, conserved in closed system. impulse = FΔt = Δp",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": true,
+      "query": "Summarize my anatomy lecture notes into study notes with key terms: heart has 4 chambers, 2 atria 2 ventricles. right side pumps to lungs (pulmonary), left to body (systemic). valves: tricuspid, mitral (bicuspid), pulmonary, aortic. SA node = pacemaker",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": true,
+      "query": "week 9 notes for my marketing module, help me get them exam-ready: 4Ps product price place promotion. STP segmentation targeting positioning. SWOT. B2B vs B2C. brand equity = value from brand name",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": true,
+      "query": "Create study notes from this week's lectures. Sociology wk4: Durkheim - social facts, anomie = normlessness. Weber - verstehen, protestant ethic & spirit of capitalism. Marx - class conflict, bourgeoisie vs proletariat, false consciousness",
+      "triggers": 2,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Explain the difference between weather and climate in two sentences.",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "What's the difference between mitosis and meiosis? I keep mixing them up for my bio exam next week",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Solve this for my physics homework: a ball is thrown straight up at 20 m/s, how long until it lands back in my hand? use g = 9.8",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Write a 1500 word essay on the causes of the French Revolution for my history class, needs an intro, 3 body paragraphs and a conclusion",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Create a complete lesson plan for teaching my year 9 class about the rock cycle, it's a 50 minute period with a starter activity",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "any tips on how to take better notes in lectures? I always fall behind when the prof talks fast",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Can you make a meeting notes template for our weekly team standup at work? we do blockers, updates, action items",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Write me a python script that walks my ~/notes folder of markdown files and builds an index.md listing every heading with a link",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Write a research report on plate tectonics with at least 5 cited sources, around 2000 words, APA style",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Give me 15 practice exam questions on the causes of World War 1 with answers",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    },
+    {
+      "should_trigger": false,
+      "query": "Explain how photosynthesis works like I'm 12, my little sister is asking",
+      "triggers": 0,
+      "runs": 2,
+      "pass": true
+    }
+  ],
+  "passed": 20,
+  "total": 20
+}

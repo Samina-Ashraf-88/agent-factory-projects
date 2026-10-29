@@ -1,0 +1,12 @@
+{
+  "eval_name": "many-topics-exact-three",
+  "prompt": "can you turn these into study notes? exam is in 2 weeks\n\nECON 101 – week 4 (mon + wed + fri lectures)\n\ndemand: law of demand = as price rises qty demanded falls, ceteris paribus\ndemand curve slopes downward\ndeterminants of demand (shift the curve): income, prices of related goods (substitutes, complements), tastes, expectations, number of buyers\nnormal good - demand up when income up. inferior good - demand down when income up (e.g. instant noodles)\nsupply: law of supply - price up -> qty supplied up\nsupply determinants: input prices, technology, expectations, number of sellers\nmovement along curve = change in price. shift of curve = change in determinant. VERY IMPORTANT DISTINCTION\nequilibrium = where Qd = Qs. eq price aka market clearing price\nsurplus when price above eq, shortage when price below\nprice elasticity of demand: PED = %ΔQd / %ΔP\n|PED| > 1 elastic, < 1 inelastic, = 1 unit elastic\ninelastic examples: insulin, gasoline short run\nmidpoint method: %Δ = (new-old)/((new+old)/2) x 100\nprice ceiling = legal max price (rent control) -> shortage if below eq\nprice floor = legal min (minimum wage) -> surplus if above eq\nQ from class: why does a binding price ceiling cause a shortage? (answer: qd > qs at the capped price)\nconsumer surplus = willingness to pay - price paid. producer surplus = price received - cost\ntotal surplus = CS + PS, maximized at equilibrium\nremember: demand curve slopes downward!!",
+  "assertions": [
+    "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+    "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+    "Every topic section contains a 'Key terms' list in which each term is in bold.",
+    "The final section is '## Review Questions' and contains exactly three numbered questions.",
+    "No question appears outside the Review Questions section, and nothing follows the third review question.",
+    "All key source facts, dates, and formulas are preserved."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "expectations": [
+    {
+      "text": "The response asks the user to paste, share, or attach their notes or class material.",
+      "passed": false,
+      "evidence": "I couldn't start on your study notes because I don't know what you're studying this week, and I couldn't get to anything that would tell me:\n\n- **Working folder:** it's empty, so there are no lecture notes, slides or readings for me to work from.\n- **Zia Tutor (your learner record) and Google Drive:** both requests were blocked because the permissions haven't been granted.\n- **Google Calendar:** i"
+    },
+    {
+      "text": "The response contains no invented study-note content (no numbered topic headings, no Review Questions).",
+      "passed": true,
+      "evidence": "topic headings: 0"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 1,
+    "total": 2,
+    "pass_rate": 0.5
+  },
+  "info": [
+    {
+      "text": "(info) skill invoked",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+I can't see any notes from this week yet. Please paste your class or lecture notes here, or attach the file or give me its path, and I'll turn them into study notes.

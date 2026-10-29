@@ -1,0 +1,1 @@
+Please paste this week's class notes here, or give me the file path (or Google Drive file name) for them. I'll turn them into study notes.

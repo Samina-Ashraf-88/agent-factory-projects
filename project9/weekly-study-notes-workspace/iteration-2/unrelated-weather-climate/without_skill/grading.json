@@ -1,0 +1,21 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was not invoked.",
+      "passed": true,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The response directly answers in at most three sentences with no study-note structure.",
+      "passed": true,
+      "evidence": "2 sentences: \"Weather is what the atmosphere is doing over a short period in a particular place, such as today's temperature, rain, wind and humidity. Climate is the long-term pattern of weather in a region, usually averaged over 30 years or more, so it describes what conditions to expect there rather than what w\""
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 0,
+    "total": 2,
+    "pass_rate": 1.0
+  },
+  "info": []
+}

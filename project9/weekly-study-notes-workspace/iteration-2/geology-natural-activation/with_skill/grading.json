@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": true,
+      "evidence": "Skill tool calls: [{'skill': 'weekly-study-notes'}]"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "6 numbered topic headings: ## 1. What Geology Is; ## 2. Minerals and Rocks; ## 3. The Three Main Rock Types; ## 4. The Rock Cycle; ## 5. Plate Tectonics; ## 6. Earth's Layers"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": true,
+      "evidence": "sections missing bold key-terms list: none"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": true,
+      "evidence": "last h2='## Review Questions'; numbered items=3"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": true,
+      "evidence": "question lines outside section: none; final line: '3. Compare how igneous and metamorphic rocks form. Which of the two needs a rock'"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": true,
+      "evidence": "missing: none"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "info": []
+}

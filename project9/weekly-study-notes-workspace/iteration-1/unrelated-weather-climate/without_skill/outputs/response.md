@@ -1,0 +1,1 @@
+Weather is the short-term state of the atmosphere at a given place and time, such as today's temperature, rain, wind, or humidity. Climate is the long-term pattern of weather in a region, usually averaged over 30 years or more, and it describes what conditions are typical rather than what is happening on a given day.

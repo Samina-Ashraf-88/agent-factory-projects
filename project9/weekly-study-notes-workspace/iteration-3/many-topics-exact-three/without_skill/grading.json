@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "7 numbered topic headings: ## 1. Demand; ## 2. Supply; ## 3. ⚠️ Movement along a curve vs. shift of the curve (VERY IMPORTANT); ## 4. Equilibrium; ## 5. Price Elasticity of Demand (PED); ## 6. Price Controls; ## 7. Surplus & Welfare"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": false,
+      "evidence": "sections missing bold key-terms list: ['## 1. Demand', '## 2. Supply', '## 3. ⚠️ Movement along a curve vs. shift of the curve (VERY IMPORTANT)', '## 4. Equilibrium', '## 5. Price Elasticity of Demand (PED)', '## 6. Price Controls', '## 7. Surplus & Welfare']"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": false,
+      "evidence": "last h2='## 2-Week Study Plan'; numbered items=0"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['**Q from class:** Why does a binding price ceiling cause a shortage?', '1. Is the price of coffee rising a \"change in demand\" or a \"change in quantity demanded\" for coffee?', '2. Income rises and demand for bus rides falls. What kind of good are bus rides?', '3. The price of ink rises. What happens to demand for printers?', '4. A new technology lowers production costs. Which curve shifts, and which way?', '5. If |PED| = 0.3, is demand elastic or inelastic?', '6. A minimum wage is set above the equilibrium wage. Shortage or surplus? Of what?', '7. Where is total surplus maximized?']; final line: ''"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": false,
+      "evidence": "missing: ['%ΔQd / %ΔP|%ΔQd/%ΔP']"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 5,
+    "total": 6,
+    "pass_rate": 0.17
+  },
+  "info": []
+}

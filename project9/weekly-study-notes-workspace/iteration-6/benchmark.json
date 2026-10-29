@@ -1,0 +1,483 @@
+{
+  "metadata": {
+    "skill_name": "weekly-study-notes",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-10-29T13:56:40Z",
+    "evals_run": [
+      "geology-natural-activation",
+      "many-topics-exact-three",
+      "missing-notes-request",
+      "unrelated-weather-climate",
+      "weekly-lecture-revision"
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": "geology-natural-activation",
+      "eval_name": "geology-natural-activation",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 16.2,
+        "tokens": 56119,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+          "passed": true,
+          "evidence": "Skill tool calls: [{'skill': 'weekly-study-notes'}]"
+        },
+        {
+          "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+          "passed": true,
+          "evidence": "5 numbered topic headings: ## 1. What Geology Is; ## 2. Minerals and Rocks; ## 3. The Three Main Rock Types; ## 4. The Rock Cycle; ## 5. Plate Tectonics and Earth's Structure"
+        },
+        {
+          "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+          "passed": true,
+          "evidence": "sections missing bold key-terms list: none"
+        },
+        {
+          "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+          "passed": true,
+          "evidence": "last h2='## Review Questions'; numbered items=3"
+        },
+        {
+          "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+          "passed": true,
+          "evidence": "question lines outside section: none; final line: '3. Compare how igneous and metamorphic rocks form. What does each start from, an'"
+        },
+        {
+          "text": "All key source facts, dates, and formulas are preserved.",
+          "passed": true,
+          "evidence": "missing: none"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "many-topics-exact-three",
+      "eval_name": "many-topics-exact-three",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 24.8,
+        "tokens": 56897,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+          "passed": true,
+          "evidence": "Skill tool calls: [{'skill': 'weekly-study-notes'}]"
+        },
+        {
+          "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+          "passed": true,
+          "evidence": "7 numbered topic headings: ## 1. Demand; ## 2. Supply; ## 3. Movement Along a Curve vs. Shift of a Curve; ## 4. Market Equilibrium; ## 5. Price Elasticity of Demand; ## 6. Price Controls; ## 7. Consumer, Producer and Total Surplus"
+        },
+        {
+          "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+          "passed": true,
+          "evidence": "sections missing bold key-terms list: none"
+        },
+        {
+          "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+          "passed": true,
+          "evidence": "last h2='## Review Questions'; numbered items=3"
+        },
+        {
+          "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+          "passed": true,
+          "evidence": "question lines outside section: none; final line: '3. Incomes rise. How would demand for instant noodles respond compared with dema'"
+        },
+        {
+          "text": "All key source facts, dates, and formulas are preserved.",
+          "passed": true,
+          "evidence": "missing: none"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "missing-notes-request",
+      "eval_name": "missing-notes-request",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 12.4,
+        "tokens": 54705,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The response asks the user to paste, share, or attach their notes or class material.",
+          "passed": true,
+          "evidence": "Please paste this week's class notes here, or give me the file path (or Google Drive file name) for them. I'll turn them into study notes."
+        },
+        {
+          "text": "The response contains no invented study-note content (no numbered topic headings, no Review Questions).",
+          "passed": true,
+          "evidence": "topic headings: 0"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "unrelated-weather-climate",
+      "eval_name": "unrelated-weather-climate",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 5.5,
+        "tokens": 23982,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The weekly-study-notes skill was not invoked.",
+          "passed": true,
+          "evidence": "Skill tool calls: []"
+        },
+        {
+          "text": "The response directly answers in at most three sentences with no study-note structure.",
+          "passed": true,
+          "evidence": "2 sentences: 'Weather is the short-term state of the atmosphere at a particular place and time: temperature, precipitation, humidity, wind, and cloud cover, which can change from minute to minute or day to day. Climate is the average pattern of weather in a region over a long period, usually 30 years or more, so '"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "weekly-lecture-revision",
+      "eval_name": "weekly-lecture-revision",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 18.7,
+        "tokens": 55926,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+          "passed": true,
+          "evidence": "Skill tool calls: [{'skill': 'weekly-study-notes'}]"
+        },
+        {
+          "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+          "passed": true,
+          "evidence": "5 numbered topic headings: ## 1. Causes of the French Revolution; ## 2. From the Estates-General to the National Assembly (1789); ## 3. The Bastille and the Declaration of Rights (1789); ## 4. The Reign of Terror (1793–94); ## 5. The End of the Revolution"
+        },
+        {
+          "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+          "passed": true,
+          "evidence": "sections missing bold key-terms list: none"
+        },
+        {
+          "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+          "passed": true,
+          "evidence": "last h2='## Review Questions'; numbered items=3"
+        },
+        {
+          "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+          "passed": true,
+          "evidence": "question lines outside section: none; final line: '3. Compare the principles in the Declaration of the Rights of Man and of the Cit'"
+        },
+        {
+          "text": "All key source facts, dates, and formulas are preserved.",
+          "passed": true,
+          "evidence": "missing: none"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "geology-natural-activation",
+      "eval_name": "geology-natural-activation",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.33,
+        "passed": 2,
+        "failed": 4,
+        "total": 6,
+        "time_seconds": 18.8,
+        "tokens": 25276,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+          "passed": false,
+          "evidence": "Skill tool calls: []"
+        },
+        {
+          "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+          "passed": true,
+          "evidence": "6 numbered topic headings: ## 1. What Is Geology?; ## 2. Minerals vs. Rocks; ## 3. The Three Rock Types; ## 4. The Rock Cycle; ## 5. Plate Tectonics; ## 6. Earth's Layers (outside → inside)"
+        },
+        {
+          "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+          "passed": false,
+          "evidence": "sections missing bold key-terms list: ['## 1. What Is Geology?', '## 2. Minerals vs. Rocks', '## 3. The Three Rock Types', '## 4. The Rock Cycle', '## 5. Plate Tectonics', \"## 6. Earth's Layers (outside → inside)\"]"
+        },
+        {
+          "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+          "passed": false,
+          "evidence": "last h2='## ✅ Quick Self-Test'; numbered items=0"
+        },
+        {
+          "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+          "passed": false,
+          "evidence": "question lines outside section: ['## 1. What Is Geology?', '1. What five characteristics define a mineral?', '2. How is a rock different from a mineral?', '4. What three factors can cause metamorphism?', '5. What are the three steps in forming a typical sedimentary rock?', '6. What does the rock cycle describe?', '7. What does plate tectonics explain?']; final line: ''"
+        },
+        {
+          "text": "All key source facts, dates, and formulas are preserved.",
+          "passed": true,
+          "evidence": "missing: none"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "many-topics-exact-three",
+      "eval_name": "many-topics-exact-three",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.17,
+        "passed": 1,
+        "failed": 5,
+        "total": 6,
+        "time_seconds": 25.7,
+        "tokens": 26426,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+          "passed": false,
+          "evidence": "Skill tool calls: []"
+        },
+        {
+          "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+          "passed": true,
+          "evidence": "7 numbered topic headings: ## 1. Demand; ## 2. Supply; ## 3. ⚠️ Movement Along vs. Shift of the Curve (VERY IMPORTANT); ## 4. Equilibrium; ## 5. Price Elasticity of Demand (PED); ## 6. Price Controls; ## 7. Consumer & Producer Surplus"
+        },
+        {
+          "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+          "passed": false,
+          "evidence": "sections missing bold key-terms list: ['## 1. Demand', '## 2. Supply', '## 3. ⚠️ Movement Along vs. Shift of the Curve (VERY IMPORTANT)', '## 4. Equilibrium', '## 5. Price Elasticity of Demand (PED)', '## 6. Price Controls', '## 7. Consumer & Producer Surplus']"
+        },
+        {
+          "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+          "passed": false,
+          "evidence": "last h2='## ✅ Quick Self-Test'; numbered items=0"
+        },
+        {
+          "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+          "passed": false,
+          "evidence": "question lines outside section: ['1. The price of coffee rises. What happens to demand for tea? For cream?', '2. Income rises and demand for bus rides falls. What kind of good are bus rides?', '3. A frost destroys orange crops. Is this a shift or a movement? Which curve moves?', '4. Price falls from $10 to $8 and Qd rises from 100 to 150. Find the PED with the midpoint method. Is demand elastic or inelastic?', '5. The government sets a minimum price above equilibrium. Is there a surplus or a shortage?']; final line: ''"
+        },
+        {
+          "text": "All key source facts, dates, and formulas are preserved.",
+          "passed": false,
+          "evidence": "missing: ['%ΔQd / %ΔP|%ΔQd/%ΔP', '(new + old) / 2|(new+old)/2|(new + old)/2']"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "missing-notes-request",
+      "eval_name": "missing-notes-request",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 1,
+        "failed": 1,
+        "total": 2,
+        "time_seconds": 21.8,
+        "tokens": 113206,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The response asks the user to paste, share, or attach their notes or class material.",
+          "passed": false,
+          "evidence": "I couldn't prepare your notes yet because I don't have any material to work from:\n\n- **Local folder:** the working directory (`C:\\Users\\AKE\\AppData\\Local\\Temp\\wsn-baseline-ij2o1ctk`) is empty, so there are no lecture files or readings here.\n- **Your connected accounts:** I tried to read your Google Drive recent files and your Zia Tutor learner record (for your Agent Factory course progress). Neith"
+        },
+        {
+          "text": "The response contains no invented study-note content (no numbered topic headings, no Review Questions).",
+          "passed": true,
+          "evidence": "topic headings: 0"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "unrelated-weather-climate",
+      "eval_name": "unrelated-weather-climate",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 5.2,
+        "tokens": 23738,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The weekly-study-notes skill was not invoked.",
+          "passed": true,
+          "evidence": "Skill tool calls: []"
+        },
+        {
+          "text": "The response directly answers in at most three sentences with no study-note structure.",
+          "passed": true,
+          "evidence": "2 sentences: \"Weather is the state of the atmosphere at a particular place and time, such as today's temperature, rain, wind or humidity, and it can change from minute to minute or day to day. Climate is the average pattern of weather in a region over a long period, usually 30 years or more, so it describes what \""
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": "weekly-lecture-revision",
+      "eval_name": "weekly-lecture-revision",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.17,
+        "passed": 1,
+        "failed": 5,
+        "total": 6,
+        "time_seconds": 15.5,
+        "tokens": 25117,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+          "passed": false,
+          "evidence": "Skill tool calls: []"
+        },
+        {
+          "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+          "passed": false,
+          "evidence": "0 numbered topic headings: "
+        },
+        {
+          "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+          "passed": false,
+          "evidence": "sections missing bold key-terms list: none"
+        },
+        {
+          "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+          "passed": false,
+          "evidence": "last h2='## Quick self-test'; numbered items=0"
+        },
+        {
+          "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+          "passed": false,
+          "evidence": "question lines outside section: ['2. When did the Estates-General last meet before 1789?', '3. What did the Third Estate become, and what oath did it take?', '4. What three principles did the Declaration of the Rights of Man set out?', '5. Who led the Reign of Terror, and about how many people were officially executed?', '6. What event usually marks the end of the Revolution?']; final line: ''"
+        },
+        {
+          "text": "All key source facts, dates, and formulas are preserved.",
+          "passed": true,
+          "evidence": "missing: none"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 15.52,
+        "stddev": 7.1908,
+        "min": 5.5,
+        "max": 24.8
+      },
+      "tokens": {
+        "mean": 49525.8,
+        "stddev": 14301.025,
+        "min": 23982,
+        "max": 56897
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.434,
+        "stddev": 0.3446,
+        "min": 0.17,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 17.4,
+        "stddev": 7.7888,
+        "min": 5.2,
+        "max": 25.7
+      },
+      "tokens": {
+        "mean": 42752.6,
+        "stddev": 39396.1939,
+        "min": 23738,
+        "max": 113206
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.57",
+      "time_seconds": "-1.9",
+      "tokens": "+6773"
+    }
+  },
+  "notes": [
+    "Activation was observed directly: with_skill runs emitted a Skill tool call for weekly-study-notes in all 3 positive cases and the missing-notes case, and none in the weather/climate case.",
+    "unrelated-weather-climate assertions are non-discriminating (both configs pass) - expected, it is a negative control.",
+    "Baseline failures are mostly format (no 'Key terms' lists, no fixed 3-question section, trailing follow-up offers), not missing facts.",
+    "Iteration 2 exposed an intermittent failure: an in-class question in the source was copied into a topic section. Fixed by instructing conversion to a statement; 3/3 reruns (iterations 3-5) and iteration 6 pass.",
+    "Trigger eval (tests/trigger_queries.json, 20 queries x 2 runs): 20/20 in iterations 1 and 2. Description unchanged since iteration 2."
+  ]
+}

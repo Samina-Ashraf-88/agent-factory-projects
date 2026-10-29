@@ -1,0 +1,1 @@
+Please paste or attach this week's class notes (or give me the file path) and I'll turn them into study notes. I won't write them without your notes, because I'd only be guessing at what was taught.

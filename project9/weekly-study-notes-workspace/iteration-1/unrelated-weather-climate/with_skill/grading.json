@@ -1,0 +1,21 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was not invoked.",
+      "passed": true,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The response directly answers in at most three sentences with no study-note structure.",
+      "passed": true,
+      "evidence": "3 sentences: 'Weather is what the atmosphere is doing over hours or days in a specific place: temperature, rain, wind and humidity. Climate is the average and range of that weather in a region over a long period, usually 30 years or more. In short, weather is what you get on a given day, and climate is what you c'"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 0,
+    "total": 2,
+    "pass_rate": 1.0
+  },
+  "info": []
+}

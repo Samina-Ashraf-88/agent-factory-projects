@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The weekly-study-notes skill was invoked via the Skill tool even though the prompt does not name it.",
+      "passed": false,
+      "evidence": "Skill tool calls: []"
+    },
+    {
+      "text": "The notes have at least three level-2 numbered topic headings before the Review Questions section.",
+      "passed": true,
+      "evidence": "5 numbered topic headings: ## 1. ⭐ Causes of the Revolution (MIDTERM); ## 2. Timeline of Key Events; ## 3. Key Concepts; ## 4. Key People and Groups; ## 5. Self-Test Questions"
+    },
+    {
+      "text": "Every topic section contains a 'Key terms' list in which each term is in bold.",
+      "passed": false,
+      "evidence": "sections missing bold key-terms list: ['## 1. ⭐ Causes of the Revolution (MIDTERM)', '## 2. Timeline of Key Events', '## 3. Key Concepts', '## 4. Key People and Groups', '## 5. Self-Test Questions']"
+    },
+    {
+      "text": "The final section is '## Review Questions' and contains exactly three numbered questions.",
+      "passed": false,
+      "evidence": "last h2='## 5. Self-Test Questions'; numbered items=0"
+    },
+    {
+      "text": "No question appears outside the Review Questions section, and nothing follows the third review question.",
+      "passed": false,
+      "evidence": "question lines outside section: ['3. When did the Estates-General last meet before 1789?', '4. What were the three estates, and roughly what share of the population was the Third Estate?', '5. What was the Tennis Court Oath, and when was it taken?', '6. Why is 14 July important in France today?', '8. Who led the Reign of Terror, and about how many people were officially executed?', '9. What event usually marks the end of the Revolution?']; final line: ''"
+    },
+    {
+      "text": "All key source facts, dates, and formulas are preserved.",
+      "passed": true,
+      "evidence": "missing: none"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 4,
+    "total": 6,
+    "pass_rate": 0.33
+  },
+  "info": []
+}

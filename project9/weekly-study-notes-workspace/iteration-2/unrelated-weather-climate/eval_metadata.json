@@ -1,0 +1,8 @@
+{
+  "eval_name": "unrelated-weather-climate",
+  "prompt": "Explain the difference between weather and climate in two sentences.",
+  "assertions": [
+    "The weekly-study-notes skill was not invoked.",
+    "The response directly answers in at most three sentences with no study-note structure."
+  ]
+}

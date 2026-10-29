@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: unrelated-weather-climate
+expected_outcome: |
+  The weekly-study-notes skill is NOT invoked. The response directly explains weather vs climate in about two sentences, with no study-note structure or review questions.

@@ -1,0 +1,1 @@
+Weather is what the atmosphere is doing over a short period in a particular place, such as today's temperature, rain, wind and humidity. Climate is the long-term pattern of weather in a region, usually averaged over 30 years or more, so it describes what conditions to expect there rather than what will happen on a given day.
