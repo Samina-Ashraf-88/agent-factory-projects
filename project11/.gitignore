@@ -1,0 +1,28 @@
+# Financial data never goes into version control.
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.json
+private/
+exports/
+
+# Generated reports and cross-check outputs
+money_detective_report.html
+reports/*
+!reports/.gitkeep
+sanitized_export/
+crosscheck_result.md
+
+# The one exception: the synthetic, fictional test wallet
+!data/sample_wallet.csv
+
+# Secrets
+.env
+*.key
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
