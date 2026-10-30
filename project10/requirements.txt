@@ -1,0 +1,2 @@
+# No third-party packages are needed. Python 3.10+ standard library only, so that
+# auditing a skill never requires trusting a new dependency.

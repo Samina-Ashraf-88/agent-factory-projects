@@ -1,0 +1,127 @@
+{
+  "one_sentence": "This skill teaches Claude Code to read and change your Airtable data with Airtable's airtable-mcp command-line tool, and yes, it reaches outside your machine and Claude account: your Airtable token and whatever records Claude sends go to Airtable's servers (mcp.airtable.com), and installing the tool downloads it from the npm registry.",
+  "what_it_does": {
+    "purpose": "A reference guide for using Airtable's airtable-mcp command-line tool: finding bases, reading, filtering, searching, and updating records.",
+    "activates": "Claude Code loads it when a task involves Airtable data or mentions airtable-mcp, bases, tables, records, or fields. It declares no special permissions and no hooks.",
+    "instructions": "Install the tool with npm, sign in with an Airtable personal access token, list the available commands, check each command's access level, confirm with you before destructive commands, then run the command.",
+    "tools": "It declares no allowed-tools, so it grants itself no extra permissions and your Claude Code permission settings still apply to its shell commands. In practice it uses the shell to run npm and airtable-mcp. The plugin that ships it also connects Claude Code to Airtable's remote MCP server.",
+    "output": "Formatted JSON from the Airtable tool, which Claude uses to answer you. The skill itself creates no files, but the tool can save a token and a command cache under ~/.airtable."
+  },
+  "source_notes": [
+    "Listed in the official catalog anthropics/claude-plugins-official (GitHub organization: anthropics; marketplace name reserved for Anthropic per the Claude Code plugin security docs). The local catalog copy was at snapshot f8c5e7a1dcb71b10cb74586224b5401f3de5db28.",
+    "Publisher repository Airtable/skills belongs to the GitHub organization Airtable, which GitHub marks as verified for airtable.com. The repo is not a fork and is MIT licensed.",
+    "The commit's signature could not be checked locally (git reports status E, signing key unavailable), so commit authorship is not cryptographically confirmed here.",
+    "After your approval, installed with claude plugin install airtable@claude-plugins-official --scope local. A byte-for-byte comparison found the installed plugin identical to the audited commit, apart from an empty .in_use marker folder, and auditing the installed skill produced the same file fingerprint. The skill was not run.",
+    "A catalog listing shows who publishes the entry, not that the code is safe. Anthropic's own trust warning says it cannot verify that plugins work as intended or won't change."
+  ],
+  "external_notes": [
+    "Reaches Airtable: every airtable-mcp command sends your token and that command's arguments, including any record data, to https://mcp.airtable.com/mcp by default. Only happens when a command runs.",
+    "Reaches npm: registry.npmjs.org, when the tool is installed. Only the package request is sent.",
+    "Mentioned only, nothing sent by the skill: airtable.com/create/tokens is where you create a token by hand.",
+    "No webhook, upload, or data-collection endpoint appears in the inspected skill files."
+  ],
+  "credential_notes": [
+    "The skill does handle a credential: an Airtable personal access token, from AIRTABLE_TOKEN or ~/.airtable/cli.json. No other service's credential is referenced, and it does not ask Claude to read SSH keys, cloud credentials, .env files, or browser data.",
+    "The skill says 'Never log or echo tokens', and airtable-mcp configure reads the token at the tool's own terminal prompt (bin.js:25748) rather than through the conversation. Whether that prompt hides what you type was not checked.",
+    "The AIRTABLE_TOKEN=pat_xxx value in the skill is a placeholder, not a real secret. No real secret was found.",
+    "Least privilege is up to you: the token's scopes decide what the skill can reach. Create one limited to the bases and scopes you need."
+  ],
+  "privacy_notes": [
+    "Can access: anything in Airtable that your token allows. It gives no instruction to read local documents, source code, email, or browser data.",
+    "Can send: record contents and queries, to Airtable only, as part of the command being run. Anything in your conversation that Claude chooses to put into a record would go there too.",
+    "Approval: the skill asks Claude to confirm with you only before tools marked destructive. Ordinary writes have no such instruction, so your Claude Code permission prompts are the check on those.",
+    "Data returned from Airtable enters the conversation and goes to your AI provider. Text in records could also contain instructions written by other people with access to that base; treat it as untrusted."
+  ],
+  "dispositions": [
+    {
+      "rule_id": "MCP_REMOTE",
+      "file": ".mcp.json",
+      "line": 4,
+      "note": "Confirmed. Publisher's own domain and expected for this product. It comes with the plugin, not this skill, and it is on whenever the plugin is enabled. No secret is stored in this file."
+    },
+    {
+      "rule_id": "NET_PACKAGE",
+      "file": "skills/airtable-cli/SKILL.md",
+      "line": 27,
+      "note": "Confirmed. No version is pinned, so a later install can fetch different code from what was reviewed. The current version, 0.2.9, was downloaded without being run: its hash matches the registry's integrity value, it has no install scripts, and its registry entry carries a signature and a provenance attestation (presence checked, neither was cryptographically verified). Declared dependencies clipanion and @modelcontextprotocol/sdk were not separately audited."
+    },
+    {
+      "rule_id": "CRED_APP_FILE",
+      "file": "skills/airtable-cli/SKILL.md",
+      "line": 40,
+      "note": "Confirmed, with a Windows caveat. The CLI does request 0600 (bin.js:9706), but Windows does not enforce POSIX file modes, so on this machine the token's protection comes from your user profile's folder permissions. The token is stored as readable JSON, not encrypted. Prefer the shortest practical token lifetime and narrow scopes."
+    },
+    {
+      "rule_id": "CRED_ENV_NAME",
+      "file": "skills/airtable-cli/SKILL.md",
+      "line": 37,
+      "note": "Confirmed and expected. The value shown is a placeholder. An exported variable is visible to other programs started from that shell, and a token typed on a command line can land in shell history."
+    }
+  ],
+  "manual_findings": [
+    {
+      "rule_id": "MANUAL_DYNAMIC_TOOLS",
+      "category": "network",
+      "severity": "MEDIUM",
+      "file": "skills/airtable-cli/SKILL.md",
+      "line": 22,
+      "evidence": "Tool names, arguments, and output shapes can change between server releases",
+      "explanation": "What this skill can do is set by Airtable's server at run time, not by this file. This audit can only describe today's skill text. New or changed server tools would not show up in it.",
+      "destination": "https://mcp.airtable.com/mcp",
+      "trigger": "conditional"
+    },
+    {
+      "rule_id": "MANUAL_COMMAND_SENDS_DATA",
+      "category": "network",
+      "severity": "MEDIUM",
+      "file": "skills/airtable-cli/SKILL.md",
+      "line": 76,
+      "evidence": "airtable-mcp <tool> --flagName value",
+      "explanation": "This is the skill's real network activity, and it looks like an ordinary local command. Each run sends the token and its arguments to Airtable. The automated scan cannot know that from the command name; the destination was confirmed by reading the tool's code (bin.js:9727).",
+      "destination": "https://mcp.airtable.com/mcp",
+      "data_at_risk": "your Airtable token, plus record data and queries in the command",
+      "trigger": "conditional"
+    },
+    {
+      "rule_id": "MANUAL_WRITE_CONSENT",
+      "category": "privacy",
+      "severity": "MEDIUM",
+      "file": "skills/airtable-cli/SKILL.md",
+      "line": 75,
+      "evidence": "Confirm with the user before running `destructive` tools.",
+      "explanation": "A good safeguard with a gap: it relies on the server's access label and covers only destructive tools. Commands labelled write, such as updating records, get no confirmation step from the skill, so overwriting shared data rests on your Claude Code permission prompts."
+    },
+    {
+      "rule_id": "MANUAL_CLAIM_INCOMPLETE",
+      "category": "network",
+      "severity": "LOW",
+      "file": "skills/airtable-cli/SKILL.md",
+      "line": 148,
+      "evidence": "CLI only allows HTTPS on `*.airtable.com`",
+      "explanation": "Mostly accurate but incomplete. The code does enforce HTTPS and an allowlist, yet also permits mcp.hyperbasedev.com, which its comment calls an Airtable-controlled local development host resolving to loopback (bin.js:9728-9733). That DNS claim was not verified. The endpoint can be changed with AIRTABLE_MCP_ENDPOINT, within the same allowlist."
+    },
+    {
+      "rule_id": "MANUAL_BROAD_WORDS",
+      "category": "injection",
+      "severity": "LOW",
+      "file": "skills/airtable-cli/SKILL.md",
+      "line": 3,
+      "evidence": "the user mentions airtable-mcp, bases, tables, records, or fields",
+      "explanation": "Tables, records, and fields are also everyday database words, so this could load during unrelated database work. The effect is limited: it adds guidance text and takes no action by itself."
+    }
+  ],
+  "automated_vs_manual": [
+    "Agreement: the scanner found the MCP connection, the npm install, the token variable, and the token file. Manual reading confirmed each one, and no automated MEDIUM or higher finding turned out to be false.",
+    "Missed by the scanner, added by hand: airtable-mcp commands are network calls (a pattern scan can't tell), server-defined tools, the write-confirmation gap, the incomplete endpoint claim, and the broad activation words.",
+    "Scanner bugs exposed by real text and fixed before this report: 'find / enrich' in prose read as a disk-wide search, product names like Outlook read as email access, and bare mentions of MCP servers scored MEDIUM. Regression tests now cover these.",
+    "No prompt injection, hidden text, encoded content, destructive command, or request to bypass safeguards was found by either the scanner or manual reading of SKILL.md."
+  ],
+  "verdict_note": "In plain terms, nothing here looks malicious, and the behavior matches what the skill says it does. It earns caution rather than clean because it holds a real credential, sends your data to an outside service, and installs code that this repository doesn't contain. Those are normal for an Airtable integration, but you should choose them knowingly: use a narrowly scoped token, and pin the npm version if you want what you install to match what was reviewed.",
+  "limitations": [
+    "Scope: one skill, airtable-cli, plus the plugin files that load with it. The plugin's 7 other skills would be installed too. They got an automated scan only (0 CRITICAL, 0 HIGH, 8 MEDIUM across the 25-file plugin, and the only MEDIUM outside airtable-cli and .mcp.json was a table design that mentions a transcript record), not a line-by-line manual read. Some of them tell Claude to look things up on the web.",
+    "The server at mcp.airtable.com cannot be inspected from here. What it does with data is governed by Airtable, and is outside this audit.",
+    "The airtable-mcp tool (dist/bin.js, 910 KB, bundled) got a targeted search and a reading of its config, endpoint, and token code, not a complete line-by-line review. The search found no child_process use. One new Function call at line 3948 looks like schema-validator code generation; that was judged from its surrounding code only.",
+    "Auto-update is on by default for this marketplace, so an installed copy can change after this review, and the npm install is unpinned. This report's fingerprint applies only to the commit audited.",
+    "Nothing was run: not the skill, the CLI, nor the MCP server, so runtime behavior was not observed."
+  ]
+}

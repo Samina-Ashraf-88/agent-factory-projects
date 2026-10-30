@@ -1,0 +1,35 @@
+...................................................Skill:    tidy-text
+Files:    1 inspected, 0 not analysed
+Source:   UNVERIFIED
+Findings: 0 CRITICAL, 0 HIGH, 0 MEDIUM, 1 LOW
+Verdict:  CLEAN WITHIN AUDIT SCOPE
+Report:   C:\Users\AKE\AppData\Local\Temp\tmpqm16crxh\r.md
+Skill:    doc-backup
+Files:    1 inspected, 0 not analysed
+Source:   UNVERIFIED
+Findings: 0 CRITICAL, 1 HIGH, 0 MEDIUM, 0 LOW
+  [HIGH] SKILL.md:10 NET_UPLOAD
+Verdict:  CAUTION — REVIEW REQUIRED
+Report:   C:\Users\AKE\AppData\Local\Temp\tmpqm16crxh\r.md
+Skill:    api-helper
+Files:    1 inspected, 0 not analysed
+Source:   UNVERIFIED
+Findings: 1 CRITICAL, 1 HIGH, 1 MEDIUM, 0 LOW
+  [CRITICAL] SKILL.md:8 EXFIL_CREDENTIAL
+  [HIGH] SKILL.md:8 NET_UPLOAD
+Verdict:  UNSAFE — DO NOT TRUST
+Report:   C:\Users\AKE\AppData\Local\Temp\tmpqm16crxh\r.md
+Error: Not a directory: C:\Users\AKE\AppData\Local\Temp\tmpqm16crxh\missing
+.............s.....
+----------------------------------------------------------------------
+Ran 70 tests in 0.436s
+
+OK (skipped=1)
+Skill:    api-helper
+Files:    1 inspected, 0 not analysed
+Source:   UNVERIFIED
+Findings: 1 CRITICAL, 1 HIGH, 1 MEDIUM, 0 LOW
+  [CRITICAL] SKILL.md:8 EXFIL_CREDENTIAL
+  [HIGH] SKILL.md:8 NET_UPLOAD
+Verdict:  UNSAFE — DO NOT TRUST
+Report:   C:\Users\AKE\AppData\Local\Temp\tmpqf9w9dlt\r.md
